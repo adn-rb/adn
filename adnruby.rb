@@ -45,6 +45,80 @@ module ADN
     def self.mute_list
       ADN.get("/stream/0/users/me/muted")
     end
+
+    # def self.posts(user_id)
+    #   ADN::Post.by_user(user_id)
+    # end
+
+    # def self.mentions(user_id)
+    #   ADN::Post.mentioning_user(user_id)
+    # end
+
+
+  end
+
+  class Post
+    def self.new(params)
+      ADN.post("/stream/0/posts", params)
+    end
+
+    def self.retrieve(post_id)
+      ADN.get("/stream/0/posts/#{post_id}")
+    end
+
+    def self.by_id(post_id)
+      self.retrieve(post_id)
+    end
+
+    def self.delete(post_id)
+      ADN.delete("/stream/0/posts/#{post_id}")
+    end
+
+    def self.replies(post_id, params = nil)
+      ADN.get("/stream/0/posts/#{post_id}/replies", params)
+    end
+
+    def self.by_user(user_id, params = nil)
+      ADN.get("/stream/0/users/#{user_id}/posts", params)
+    end
+
+    def self.mentioning_user(user_id, params = nil)
+      ADN.get("/stream/0/users/#{user_id}/mentions", params)
+    end
+
+    def self.stream(params = nil)
+      ADN.get("/stream/0/posts/stream", params)
+    end
+
+    def self.global_stream(params = nil)
+      ADN.get("/stream/0/posts/stream/global", params)
+    end
+
+    def self.by_hashtag(hashtag, params = nil)
+      ADN.get("/stream/0/posts/tag/#{hashtag}", params)
+    end
+
+  end
+
+  class Stream
+    # Not Yet Implemented
+    # https://github.com/appdotnet/api-spec/blob/master/resources/streams.md
+  end
+
+  class Subscription
+    # Not Yet Implemented
+    # https://github.com/appdotnet/api-spec/blob/master/resources/subscriptions.md
+  end
+
+  class Filter
+    # Not Yet Implemented
+    # https://github.com/appdotnet/api-spec/blob/master/resources/filters.md
+  end
+
+  class Token
+    def self.current
+      ADN.get("/stream/0/token")
+    end
   end
 
   def self.get(url, params = nil)
