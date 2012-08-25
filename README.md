@@ -13,7 +13,7 @@ Simply add ADNRuby to your Gemfile:
 
 Or you can install ADNRuby directly from rubygems.org:
 
-`gem install mongoid`
+`gem install adnruby`
 
 
 ### Usage
