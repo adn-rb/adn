@@ -3,15 +3,25 @@ ADNRuby
 
 A Ruby library for App.net by [@kishyr](https://alpha.app.net/kishyr).  
 
-### Currently
-This library provides a module for Ruby that is feature complete. At some point, it'll be packaged as a gem and made available on rubygems. If you'd like to use it as-is, for now simply `load 'adnruby.rb'` in your code.  
-
 This library follows the current [App.net API Spec](https://github.com/appdotnet/api-spec) (as at 25 August 2012) with easy-to-use and understand methods that returns the data back as a `Hash`.  
+
+### Installation
+
+Simply add ADNRuby to your Gemfile:
+
+`gem "adnruby"`
+
+Or you can install ADNRuby directly from rubygems.org:
+
+`gem install mongoid`
+
 
 ### Usage
 For API calls that accept parameters described in the App.net API Spec, simply pass them as a dictionary to the method.  
 
 ```ruby
+  require 'adnruby'
+
   ADN.token = "your App.net OAuth-token here."
 
   # Users
@@ -30,7 +40,7 @@ For API calls that accept parameters described in the App.net API Spec, simply p
   global_stream = ADN::Post.global_stream
 ```
 
-A complete method list will be available on this README soon, but in the meantime you can browse all API methods in `adnruby.rb`.
+A complete method list will be available on this README soon, but in the meantime you can browse all API methods in `lib/adnruby.rb`.
 
 ---
 
