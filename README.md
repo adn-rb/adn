@@ -1,9 +1,9 @@
 ADNRuby
 =======
 
-A Ruby library for App.net by [@kishyr](https://alpha.app.net/kishyr).  
+A Ruby library for App.net by [@kishyr](https://alpha.app.net/kishyr). 
 
-This library follows the current [App.net API Spec](https://github.com/appdotnet/api-spec) (as at 25 August 2012) with easy-to-use and understand methods that returns the data back as a `Hash`.  
+This library follows the current [App.net API Spec](https://github.com/appdotnet/api-spec) (as at 26 August 2012).  
 
 ### Installation
 
@@ -24,9 +24,47 @@ For API calls that accept parameters described in the App.net API Spec, simply p
 
   ADN.token = "your App.net OAuth-token here."
 
+  # The easiest way to access a user's data is by initializing the user as an object
+  me = ADN::User.new("me") # Parameter can be "me", an integer user ID, or a username.
+  me.id
+  me.name
+  me.username
+  me.counts
+  me.cover_image
+  me.description
+  me.avatar_image
+  me.created_at
+
+  me.followers    # => Followers as an Array
+  me.following    # => Following as Array
+  me.posts        # User's posts as an Array
+  me.stream       # User's stream as an Array
+  me.mentions     # User's mentions as an Array
+
+  # Follow another user using their username or user ID
+  me.follow "anotheruser"  
+  me.unfollow 1234
+
+  # Follow another user using their ADN::User object
+  another_user = ADN::User.new("anotheruser")
+  me.follow another_user
+  me.unfollow another_user
+  me.mute another_user
+  me.unmute another_user
+  me.mute_list
+
+  # And access another user's following status relative to yours
+  another_user.follows_you
+  another_user.is_muted
+  another_user.is_following
+  # etc ...
+
+  # Alternatively access everying in it's raw return format (converted to a Hash) by accessing the 
+  # ADN::Users and ADN::Post module methods
+
   # Users
-  user_details = ADN::User.retrieve "me"
-  follow_data = ADN::User.follow "kishyr"
+  my_details = ADN::Users.by_id "me" 
+  another_user = ADN::Users.by_id 1234
   # etc...
 
   # Posts
@@ -40,7 +78,7 @@ For API calls that accept parameters described in the App.net API Spec, simply p
   global_stream = ADN::Post.global_stream
 ```
 
-A complete method list will be available on this README soon, but in the meantime you can browse all API methods in `lib/adnruby.rb`.
+Completed documentation will be available soon, but in the meantime you can browse all API methods in `lib/adnruby.rb`.
 
 ---
 
