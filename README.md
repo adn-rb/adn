@@ -59,7 +59,7 @@ For API calls that accept parameters described in the App.net API Spec, simply p
   another_user.is_following
   # etc ...
 
-  # Alternatively access everying in it's raw return format (converted to a Hash) by accessing the 
+  # Alternatively access everying in its raw return format (converted to a Hash) by accessing the 
   # ADN::Users and ADN::Post module methods
 
   # Users
