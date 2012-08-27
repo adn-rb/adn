@@ -27,8 +27,8 @@ require 'uri'
 require 'json'
 require 'date'
 
-API = "alpha-api.app.net"
-ADNHTTP = Net::HTTP.new(API, 443)
+APIHOST = "alpha-api.app.net"
+ADNHTTP = Net::HTTP.new(APIHOST, 443)
 ADNHTTP.use_ssl = true
 
 module ADN
