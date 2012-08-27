@@ -16,6 +16,19 @@ Or you can install ADNRuby directly from rubygems.org:
 `gem install adnruby`
 
 
+### Changelog
+
+* **Version 0.3**   
+  * Now includes a Post class that describes each post along with a bunch of new methods of accessing a post's replies and the post's original post.  
+  * Users methods that return user details (follow, unfollow, following, followers, mute, unmute, mute_list) will now return either a User object back, or an array of User objects.  
+  * Similarly, User methods that return post details (posts, mentions, stream) will return a Post object, or an array of Post objects.  
+  * To accomplish all this, I've had to change the module structure which will break existing code if you've relied on the modules to access any data. Basically, all modules begin with ADN::API:: now (eg. ADN::API::Post, ADN::API::User).  
+* **Version 0.2**  
+  * Changed all existing classes to modules and introduced the User class for easily accessing user details
+* **Version 0.1**
+  * Really basic functionality for all existing App.new API methods as per the spec.
+
+
 ### Usage
 For API calls that accept parameters described in the App.net API Spec, simply pass them as a dictionary to the method.  
 
@@ -41,6 +54,13 @@ For API calls that accept parameters described in the App.net API Spec, simply p
   me.stream       # User's stream as an Array
   me.mentions     # User's mentions as an Array
 
+  me.followers.first.user.username        # The first follower's user's username
+  me.following.last.posts.first           # The last user that follows the 'me' user's last post
+  me.following.last.posts.first.replies   # Repliest to the last post of the above example's post
+  me.mentions.last.user.avatar_image      # The first user that mentioned the 'me' user's avater image
+  me.stream.last.html                     # The HTML of the last post in the 'me' user's stream
+  me.posts.first.delete                   # Delete the 'me' user's first post
+
   # Follow another user using their username or user ID
   me.follow "anotheruser"  
   me.unfollow 1234
@@ -59,23 +79,24 @@ For API calls that accept parameters described in the App.net API Spec, simply p
   another_user.is_following
   # etc ...
 
-  # Alternatively access everying in its raw return format (converted to a Hash) by accessing the 
-  # ADN::Users and ADN::Post module methods
-
-  # Users
-  my_details = ADN::Users.by_id "me" 
-  another_user = ADN::Users.by_id 1234
-  # etc...
-
   # Posts
   params = { text: "This is an example post on App.net!", reply_to: 189018 }
-  post_data = ADN::Post.new(params)
+  post_data = ADN::Post.send(params) # Returns a Post object
+
+
+  # Alternatively access everying in its raw return format (converted to a Hash) by accessing the 
+  # ADN::API::User and ADN::API::Post module methods
+
+  # Users
+  my_details = ADN::API::User.by_id "me" 
+  another_user = ADN::API::User.by_id 1234
+  # etc...
 
   # User's stream
-  user_stream = ADN::Post.stream({ count: 10, include_replies: "true" })
+  user_stream = ADN::API::Post.stream({ count: 10, include_replies: "true" })
 
   # Global stream
-  global_stream = ADN::Post.global_stream
+  global_stream = ADN::API::Post.global_stream
 ```
 
 Completed documentation will be available soon, but in the meantime you can browse all API methods in `lib/adnruby.rb`.

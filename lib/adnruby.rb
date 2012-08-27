@@ -25,6 +25,7 @@
 require 'net/https'
 require 'uri'
 require 'json'
+require 'date'
 
 API = "alpha-api.app.net"
 ADNHTTP = Net::HTTP.new(API, 443)
@@ -43,12 +44,19 @@ module ADN
     attr_accessor :user_id
     attr_accessor :avatar_image, :counts, :cover_image, :created_at, :description, :follows_you, :id, :is_follower, :is_following, :is_muted, :locale, :name, :timezone, :type, :username, :you_follow, :you_muted
 
-    def initialize(user_id)
-      @user_id = user_id
-      details = self.details
-      if details.has_key? "data"
-        details["data"].each do |k, v|
+    def initialize(user)
+      if user.is_a? Hash
+        user.each do |k, v|
           self.instance_variable_set "@#{k}", v
+        end
+        @user_id = self.id
+      else
+        @user_id = user
+        details = self.details
+        if details.has_key? "data"
+          details["data"].each do |k, v|
+            self.instance_variable_set "@#{k}", v
+          end
         end
       end
     end
@@ -59,7 +67,7 @@ module ADN
         self.instance_variables.each { |iv| h[iv.to_s.gsub(/[^a-zA-Z0-9_]/, '')] = self.instance_variable_get(iv) }
         h
       else
-        ADN::Users.retrieve(@user_id)
+        ADN::API::User.retrieve(@user_id)
       end
     end
 
@@ -69,23 +77,23 @@ module ADN
     def follow(user)
       user_id = user.is_a?(ADN::User) ? user.id : user
       result = ADN.post("/stream/0/users/#{user_id}/follow")
-      result["data"] unless result.has_error?
+      User.new(result["data"]) unless result.has_error?
     end
 
     def unfollow(user)
       user_id = user.is_a?(ADN::User) ? user.id : user
       result = ADN.delete("/stream/0/users/#{user_id}/follow")
-      result["data"] unless result.has_error?
+      User.new(result["data"]) unless result.has_error?
     end
 
     def followers
-      result = ADN::Users.followers(@user_id)
-      result["data"] unless result.has_error?
+      result = ADN::API::User.followers(@user_id)
+      result["data"].collect { |u| User.new(u) } unless result.has_error?
     end
 
     def following
-      result = ADN::Users.following(@user_id)
-      result["data"] unless result.has_error?
+      result = ADN::API::User.following(@user_id)
+      result["data"].collect { |u| User.new(u) } unless result.has_error?
     end
 
     
@@ -94,36 +102,36 @@ module ADN
     def mute(user)
       user_id = user.is_a?(ADN::User) ? user.id : user
       result = ADN.post("/stream/0/users/#{user_id}/mute")
-      result["data"] unless result.has_error?
+      User.new(result["data"]) unless result.has_error?
     end
 
     def unmute(user)
       user_id = user.is_a?(ADN::User) ? user.id : user
       result = ADN.delete("/stream/0/users/#{user_id}/mute")
-      result["data"] unless result.has_error?
+      User.new(result["data"]) unless result.has_error?
     end
 
     def mute_list
       result = ADN.get("/stream/0/users/me/muted")
-      result["data"] unless result.has_error?
+      result["data"].collect { |u| User.new(u) } unless result.has_error?
     end
 
     
     # Posts
 
     def posts(params = nil)
-      result = ADN::Post.by_user(@user_id, params)
-      result["data"] unless result.has_error?
+      result = ADN::API::Post.by_user(@user_id, params)
+      result["data"].collect { |p| Post.new(p) } unless result.has_error?
     end
 
     def stream(params = nil)
-      result = ADN::Post.stream(params)
-      result["data"] unless result.has_error?
+      result = ADN::API::Post.stream(params)
+      result["data"].collect { |p| Post.new(p) } unless result.has_error?
     end
 
     def mentions(params = nil)
-      result = ADN::Post.mentioning_user(@user_id, params)
-      result["data"] unless result.has_error?
+      result = ADN::API::Post.mentioning_user(@user_id, params)
+      result["data"].collect { |p| Post.new(p) } unless result.has_error?
     end
 
     # Errors
@@ -134,94 +142,155 @@ module ADN
 
   end
 
+  class Post
+    attr_accessor :post_id, :created_at, :entities, :html, :id, :num_replies, :reply_to, :source, :text, :thread_id, :user
 
-  # Modules
-
-  module Users
-
-    def self.retrieve(user_id)
-      ADN.get("/stream/0/users/#{user_id}")
+    def self.send(params)
+      result = ADN::API::Post.new(params)
+      Post.new(result["data"]) unless result.has_error?
     end
 
-    def self.by_id(user_id)
-      self.retrieve(user_id)
+    def initialize(raw_post)
+      if raw_post.is_a? Hash
+        raw_post.each do |k, v|
+          self.instance_variable_set "@#{k}", v
+        end
+        @post_id = @id
+      else
+        @post_id = raw_post
+        details = self.details
+        if details.has_key? "data"
+          details["data"].each do |k, v|
+            self.instance_variable_set "@#{k}", v
+          end
+        end
+      end
     end
 
-    def self.following(user_id)
-      ADN.get("/stream/0/users/#{user_id}/following")
+    def details
+      if self.id
+        h = {}
+        self.instance_variables.each { |iv| h[iv.to_s.gsub(/[^a-zA-Z0-9_]/, '')] = self.instance_variable_get(iv) }
+        h
+      else
+        ADN::API::Post.by_id(@post_id)
+      end
     end
 
-    def self.followers(user_id)
-      ADN.get("/stream/0/users/#{user_id}/followers")
+    def created_at
+      DateTime.parse(@created_at)
     end
 
-  end
-
-  module Post
-    def self.new(params)
-      ADN.post("/stream/0/posts", params)
+    def user
+      ADN::User.new @user
     end
 
-    def self.retrieve(post_id)
-      ADN.get("/stream/0/posts/#{post_id}")
+    def reply_to_post
+      result = ADN::API::Post.by_id @reply_to
+      Post.new(result["data"]) unless result.has_error?
     end
 
-    def self.by_id(post_id)
-      self.retrieve(post_id)
+    def replies(params = nil)
+      result = ADN::API::Post.replies(@id, params)
+      result["data"].collect { |p| Post.new(p) } unless result.has_error?
     end
 
-    def self.delete(post_id)
-      ADN.delete("/stream/0/posts/#{post_id}")
-    end
-
-    def self.replies(post_id, params = nil)
-      ADN.get("/stream/0/posts/#{post_id}/replies", params)
-    end
-
-    def self.by_user(user_id, params = nil)
-      ADN.get("/stream/0/users/#{user_id}/posts", params)
-    end
-
-    def self.mentioning_user(user_id, params = nil)
-      ADN.get("/stream/0/users/#{user_id}/mentions", params)
-    end
-
-    def self.stream(params = nil)
-      ADN.get("/stream/0/posts/stream", params)
-    end
-
-    def self.global_stream(params = nil)
-      ADN.get("/stream/0/posts/stream/global", params)
-    end
-
-    def self.by_hashtag(hashtag, params = nil)
-      ADN.get("/stream/0/posts/tag/#{hashtag}", params)
+    def delete
+      result = ADN::API::Post.delete(@id)
+      Post.new(result["data"]) unless result.has_error?
     end
 
   end
 
-  module Stream
-    # Not Yet Implemented
-    # https://github.com/appdotnet/api-spec/blob/master/resources/streams.md
-  end
 
-  module Subscription
-    # Not Yet Implemented
-    # https://github.com/appdotnet/api-spec/blob/master/resources/subscriptions.md
-  end
+  # API Modules
 
-  module Filter
-    # Not Yet Implemented
-    # https://github.com/appdotnet/api-spec/blob/master/resources/filters.md
-  end
+  module API
+    module User
 
-  module Token
-    def self.current
-      result = ADN.get("/stream/0/token")
-      result["data"] unless result.has_error?
+      def self.retrieve(user_id)
+        ADN.get("/stream/0/users/#{user_id}")
+      end
+
+      def self.by_id(user_id)
+        self.retrieve(user_id)
+      end
+
+      def self.following(user_id)
+        ADN.get("/stream/0/users/#{user_id}/following")
+      end
+
+      def self.followers(user_id)
+        ADN.get("/stream/0/users/#{user_id}/followers")
+      end
+
+    end
+
+    module Post
+      def self.new(params)
+        ADN.post("/stream/0/posts", params)
+      end
+
+      def self.retrieve(post_id)
+        ADN.get("/stream/0/posts/#{post_id}")
+      end
+
+      def self.by_id(post_id)
+        self.retrieve(post_id)
+      end
+
+      def self.delete(post_id)
+        ADN.delete("/stream/0/posts/#{post_id}")
+      end
+
+      def self.replies(post_id, params = nil)
+        ADN.get("/stream/0/posts/#{post_id}/replies", params)
+      end
+
+      def self.by_user(user_id, params = nil)
+        ADN.get("/stream/0/users/#{user_id}/posts", params)
+      end
+
+      def self.mentioning_user(user_id, params = nil)
+        ADN.get("/stream/0/users/#{user_id}/mentions", params)
+      end
+
+      def self.stream(params = nil)
+        ADN.get("/stream/0/posts/stream", params)
+      end
+
+      def self.global_stream(params = nil)
+        ADN.get("/stream/0/posts/stream/global", params)
+      end
+
+      def self.by_hashtag(hashtag, params = nil)
+        ADN.get("/stream/0/posts/tag/#{hashtag}", params)
+      end
+
+    end
+
+    module Stream
+      # Not Yet Implemented
+      # https://github.com/appdotnet/api-spec/blob/master/resources/streams.md
+    end
+
+    module Subscription
+      # Not Yet Implemented
+      # https://github.com/appdotnet/api-spec/blob/master/resources/subscriptions.md
+    end
+
+    module Filter
+      # Not Yet Implemented
+      # https://github.com/appdotnet/api-spec/blob/master/resources/filters.md
+    end
+
+    module Token
+      def self.current
+        result = ADN.get("/stream/0/token")
+        result["data"] unless result.has_error?
+      end
     end
   end
-
 
 
   private 
