@@ -295,35 +295,32 @@ module ADN
 
   private 
 
-  def self.get(url, params = nil)
-    get_url = params.nil? ? url : "#{url}?#{URI.encode_www_form(params)}"
-    request = Net::HTTP::Get.new(get_url)
+  def self.get_response(request)
     request.add_field("Authorization", "Bearer #{ADN.token}")
     response = ADNHTTP.request(request)
-    return JSON.parse(response.body)
+    JSON.parse(response.body)
+  end 
+
+  def self.get(url, params = nil)
+    get_url = params.nil? ? url : "#{url}?#{URI.encode_www_form(params)}"
+    self.get_response(Net::HTTP::Get.new(get_url))
   end
 
   def self.post(url, params = nil)
     request = Net::HTTP::Post.new(url)
     request.set_form_data(params) if params
-    request.add_field("Authorization", "Bearer #{ADN.token}")
-    response = ADNHTTP.request(request)
-    return JSON.parse(response.body)
+    self.get_response(request)
   end
 
   def self.put(url, params = nil)
     request = Net::HTTP::Put.new(url)
     request.set_form_data(params) if params
-    request.add_field("Authorization", "Bearer #{ADN.token}")
-    response = ADNHTTP.request(request)
-    return JSON.parse(response.body)
+    self.get_response(request)
   end
 
   def self.delete(url, params = nil)
     request = Net::HTTP::Delete.new(url)
-    request.add_field("Authorization", "Bearer #{ADN.token}")
-    response = ADNHTTP.request(request)
-    return JSON.parse(response.body)
+    self.get_response(request)
   end
 end
 
