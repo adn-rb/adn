@@ -296,7 +296,7 @@ module ADN
   private 
 
   def self.get_response(request)
-    Request.add_field("Authorization", "Bearer #{ADN.token}")
+    request.add_field("Authorization", "Bearer #{ADN.token}")
     response = ADNHTTP.request(request)
     JSON.parse(response.body)
   end 
