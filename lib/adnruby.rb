@@ -74,14 +74,18 @@ module ADN
 
     # Followers/Users
 
+    def get_user(user)
+      user.is_a?(ADN::User) ? user.id : user
+    end
+
     def follow(user)
-      user_id = user.is_a?(ADN::User) ? user.id : user
+      user_id = get_user(user)
       result = ADN.post("/stream/0/users/#{user_id}/follow")
       User.new(result["data"]) unless result.has_error?
     end
 
     def unfollow(user)
-      user_id = user.is_a?(ADN::User) ? user.id : user
+      user_id = get_user(user)
       result = ADN.delete("/stream/0/users/#{user_id}/follow")
       User.new(result["data"]) unless result.has_error?
     end
@@ -100,13 +104,13 @@ module ADN
     # Mute
 
     def mute(user)
-      user_id = user.is_a?(ADN::User) ? user.id : user
+      user_id = get_user(user)
       result = ADN.post("/stream/0/users/#{user_id}/mute")
       User.new(result["data"]) unless result.has_error?
     end
 
     def unmute(user)
-      user_id = user.is_a?(ADN::User) ? user.id : user
+      user_id = get_user(user)
       result = ADN.delete("/stream/0/users/#{user_id}/mute")
       User.new(result["data"]) unless result.has_error?
     end
