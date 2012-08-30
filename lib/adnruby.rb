@@ -1,6 +1,6 @@
 #
 # ADNRuby - A simple and easy to use App.net Ruby library
-# 
+#
 # Copyright (c) 2012 Kishyr Ramdial
 #
 # Permission is hereby granted, free of charge, to any person obtaining
@@ -27,11 +27,11 @@ require 'uri'
 require 'json'
 require 'date'
 
-APIHOST = "alpha-api.app.net"
-ADNHTTP = Net::HTTP.new(APIHOST, 443)
-ADNHTTP.use_ssl = true
-
 module ADN
+  API_HOST = "alpha-api.app.net"
+  HTTP = Net::HTTP.new(API_HOST, 443)
+  HTTP.use_ssl = true
+
   def self.token=(token)
     @token = token
   end
@@ -100,7 +100,7 @@ module ADN
       result["data"].collect { |u| User.new(u) } unless result.has_error?
     end
 
-    
+
     # Mute
 
     def mute(user)
@@ -120,7 +120,7 @@ module ADN
       result["data"].collect { |u| User.new(u) } unless result.has_error?
     end
 
-    
+
     # Posts
 
     def posts(params = nil)
@@ -297,13 +297,13 @@ module ADN
   end
 
 
-  private 
+  private
 
   def self.get_response(request)
     request.add_field("Authorization", "Bearer #{ADN.token}")
-    response = ADNHTTP.request(request)
+    response = ADN::HTTP.request(request)
     JSON.parse(response.body)
-  end 
+  end
 
   def self.get(url, params = nil)
     get_url = params.nil? ? url : "#{url}?#{URI.encode_www_form(params)}"
