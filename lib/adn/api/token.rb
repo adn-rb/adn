@@ -5,7 +5,7 @@ module ADN
     module Token
       def self.current
         result = ADN.get("/stream/0/token")
-        result["data"] unless result.has_error?
+        result["data"] unless ADN.has_error?(result)
       end
     end
   end

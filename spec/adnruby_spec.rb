@@ -3,9 +3,8 @@
 require_relative 'spec_helper'
 
 describe "ADNRuby" do
-  # TODO: Put the error handling somewhere else.
-  it "currently monkeypatches Hash" do
-    { 'error' => 123 }.has_error?.must_equal true
-    { 'other' => 000 }.has_error?.must_equal false
+  it "currently checks returned a Hash for errors" do
+    ADN.has_error?({ 'error' => 123 }).must_equal true
+    ADN.has_error?({ 'other' => 000 }).must_equal false
   end
 end

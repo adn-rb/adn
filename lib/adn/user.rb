@@ -54,23 +54,23 @@ module ADN
     def follow(user)
       user_id = get_user(user)
       result = ADN.post("/stream/0/users/#{user_id}/follow")
-      User.new(result["data"]) unless result.has_error?
+      User.new(result["data"]) unless ADN.has_error?(result)
     end
 
     def unfollow(user)
       user_id = get_user(user)
       result = ADN.delete("/stream/0/users/#{user_id}/follow")
-      User.new(result["data"]) unless result.has_error?
+      User.new(result["data"]) unless ADN.has_error?(result)
     end
 
     def followers
       result = ADN::API::User.followers(@user_id)
-      result["data"].collect { |u| User.new(u) } unless result.has_error?
+      result["data"].collect { |u| User.new(u) } unless ADN.has_error?(result)
     end
 
     def following
       result = ADN::API::User.following(@user_id)
-      result["data"].collect { |u| User.new(u) } unless result.has_error?
+      result["data"].collect { |u| User.new(u) } unless ADN.has_error?(result)
     end
 
 
@@ -79,18 +79,18 @@ module ADN
     def mute(user)
       user_id = get_user(user)
       result = ADN.post("/stream/0/users/#{user_id}/mute")
-      User.new(result["data"]) unless result.has_error?
+      User.new(result["data"]) unless ADN.has_error?(result)
     end
 
     def unmute(user)
       user_id = get_user(user)
       result = ADN.delete("/stream/0/users/#{user_id}/mute")
-      User.new(result["data"]) unless result.has_error?
+      User.new(result["data"]) unless ADN.has_error?(result)
     end
 
     def mute_list
       result = ADN.get("/stream/0/users/me/muted")
-      result["data"].collect { |u| User.new(u) } unless result.has_error?
+      result["data"].collect { |u| User.new(u) } unless ADN.has_error?(result)
     end
 
 
@@ -98,17 +98,17 @@ module ADN
 
     def posts(params = nil)
       result = ADN::API::Post.by_user(@user_id, params)
-      result["data"].collect { |p| Post.new(p) } unless result.has_error?
+      result["data"].collect { |p| Post.new(p) } unless ADN.has_error?(result)
     end
 
     def stream(params = nil)
       result = ADN::API::Post.stream(params)
-      result["data"].collect { |p| Post.new(p) } unless result.has_error?
+      result["data"].collect { |p| Post.new(p) } unless ADN.has_error?(result)
     end
 
     def mentions(params = nil)
       result = ADN::API::Post.mentioning_user(@user_id, params)
-      result["data"].collect { |p| Post.new(p) } unless result.has_error?
+      result["data"].collect { |p| Post.new(p) } unless ADN.has_error?(result)
     end
 
     # Errors
