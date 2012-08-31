@@ -71,6 +71,10 @@ module ADN
       end
     end
 
+    def created_at
+      DateTime.parse(@created_at)
+    end
+
 
     # Followers/Users
 
