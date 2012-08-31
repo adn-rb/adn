@@ -42,6 +42,10 @@ module ADN
     @token
   end
 
+  def self.has_error?(hash)
+    hash.has_key?("error")
+  end
+
   private
 
   def self.get_response(request)
@@ -70,11 +74,5 @@ module ADN
   def self.delete(url, params = nil)
     request = Net::HTTP::Delete.new(url)
     self.get_response(request)
-  end
-end
-
-class Hash
-  def has_error?
-    self.has_key? "error"
   end
 end
