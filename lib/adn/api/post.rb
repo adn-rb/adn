@@ -4,7 +4,7 @@ module ADN
   module API
     module Post
       def self.new(params)
-        ADN.post("#{ADN::API_ENDPOINT}", params)
+        ADN.post("#{ADN::API_ENDPOINT_POSTS}", params)
       end
 
       def self.retrieve(post_id)
