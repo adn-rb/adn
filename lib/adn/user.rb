@@ -78,18 +78,18 @@ module ADN
 
     def mute(user)
       user_id = get_user(user)
-      result = ADN.post("/stream/0/users/#{user_id}/mute")
+      result = ADN.post("#{ADN::API_ENDPOINT_USERS}/#{user_id}/mute")
       User.new(result["data"]) unless ADN.has_error?(result)
     end
 
     def unmute(user)
       user_id = get_user(user)
-      result = ADN.delete("/stream/0/users/#{user_id}/mute")
+      result = ADN.delete("#{ADN::API_ENDPOINT_USERS}/#{user_id}/mute")
       User.new(result["data"]) unless ADN.has_error?(result)
     end
 
     def mute_list
-      result = ADN.get("/stream/0/users/me/muted")
+      result = ADN.get("#{ADN::API_ENDPOINT_USERS}/me/muted")
       result["data"].collect { |u| User.new(u) } unless ADN.has_error?(result)
     end
 
