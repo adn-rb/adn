@@ -29,7 +29,6 @@ require 'date'
 %w{constants api post user version}.each { |f| require_relative "adn/#{f}" }
 
 module ADN
-<<<<<<< HEAD
   API_HOST = "alpha-api.app.net"
   API_ENDPOINT = "/stream/0"
   API_ENDPOINT_POSTS = "#{API_ENDPOINT}/posts"
@@ -37,8 +36,6 @@ module ADN
   HTTP = Net::HTTP.new(API_HOST, 443)
   
   HTTP.use_ssl = true
-=======
->>>>>>> issue-7-move-constants
 
   def self.token=(token)
     @token = token
