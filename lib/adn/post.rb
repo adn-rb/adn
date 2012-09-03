@@ -37,11 +37,11 @@ module ADN
     end
 
     def created_at
-      DateTime.parse(created_at)
+      DateTime.parse(@created_at)
     end
 
     def user
-      ADN::User.new user
+      ADN::User.new @user
     end
 
     def reply_to_post
