@@ -14,7 +14,7 @@ module ADN
     def initialize(raw_post)
       if raw_post.is_a? Hash
         raw_post.each do |k, v|
-          self.instance_variable_set "@#{k}", v
+          self.instance_variable_set("@#{k}", v) if self.respond_to?(k)
         end
         post_id = id
       else
@@ -22,7 +22,7 @@ module ADN
         details = self.details
         if details.has_key? "data"
           details["data"].each do |k, v|
-            self.instance_variable_set "@#{k}", v
+            self.instance_variable_set("@#{k}", v) if self.respond_to?(k)
           end
         end
       end
@@ -31,9 +31,9 @@ module ADN
     def details
       if self.id
         h = {}
-        self.instance_variables.each { |iv|
+        self.instance_variables.each do |iv|
           h[iv.to_s.gsub(/[^a-zA-Z0-9_]/, '')] = self.instance_variable_get(iv)
-        }
+        end
         h
       else
         ADN::API::Post.by_id(post_id)
