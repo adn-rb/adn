@@ -56,6 +56,7 @@ module ADN
   end
 
   def self.post(url, params = nil)
+    p = "Post".constantize
     request = Net::HTTP::Post.new(url)
     request.set_form_data(params) if params
     self.get_response(request)
