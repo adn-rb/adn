@@ -91,7 +91,7 @@ For API calls that accept parameters described in the App.net API Spec, simply p
 
   # Posts
   params = { text: "This is an example post on App.net!", reply_to: 189018 }
-  post_data = ADN::Post.send(params) # Returns a Post object
+  post_data = ADN::Post.send_post(params) # Returns a Post object
 
 
   # Alternatively access everying in its raw return format (converted to a Hash) by accessing the 
