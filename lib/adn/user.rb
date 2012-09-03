@@ -36,12 +36,12 @@ module ADN
         }
         h
       else
-        ADN::API::User.retrieve(@user_id)
+        ADN::API::User.retrieve(user_id)
       end
     end
 
     def created_at
-      DateTime.parse(@created_at)
+      DateTime.parse(created_at)
     end
 
 
@@ -64,12 +64,12 @@ module ADN
     end
 
     def followers
-      result = ADN::API::User.followers(@user_id)
+      result = ADN::API::User.followers(user_id)
       result["data"].collect { |u| User.new(u) } unless ADN.has_error?(result)
     end
 
     def following
-      result = ADN::API::User.following(@user_id)
+      result = ADN::API::User.following(user_id)
       result["data"].collect { |u| User.new(u) } unless ADN.has_error?(result)
     end
 
@@ -97,7 +97,7 @@ module ADN
     # Posts
 
     def posts(params = nil)
-      result = ADN::API::Post.by_user(@user_id, params)
+      result = ADN::API::Post.by_user(user_id, params)
       result["data"].collect { |p| Post.new(p) } unless ADN.has_error?(result)
     end
 
@@ -107,7 +107,7 @@ module ADN
     end
 
     def mentions(params = nil)
-      result = ADN::API::Post.mentioning_user(@user_id, params)
+      result = ADN::API::Post.mentioning_user(user_id, params)
       result["data"].collect { |p| Post.new(p) } unless ADN.has_error?(result)
     end
 
