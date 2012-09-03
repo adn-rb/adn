@@ -12,7 +12,7 @@ module ADN
     end
 
     def initialize(raw_post)
-      if raw_post.is_a? Hash
+      if raw_post.respond_to?(:each_pair)
         self.set_values(raw_post)
         post_id = id
       else
@@ -60,7 +60,7 @@ module ADN
     end
     
     def set_values(values)
-      values.each do |k, v|
+      values.each_pair do |k, v|
         self.send("#{k}=", v) if self.respond_to?("#{k}=")
       end
     end
