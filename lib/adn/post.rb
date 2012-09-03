@@ -13,17 +13,13 @@ module ADN
 
     def initialize(raw_post)
       if raw_post.is_a? Hash
-        raw_post.each do |k, v|
-          self.instance_variable_set("@#{k}", v) if self.respond_to?(k)
-        end
+        self.set_values(raw_post)
         post_id = id
       else
         post_id = raw_post
         details = self.details
         if details.has_key? "data"
-          details["data"].each do |k, v|
-            self.instance_variable_set("@#{k}", v) if self.respond_to?(k)
-          end
+          self.set_values(details["data"])
         end
       end
     end
@@ -61,6 +57,12 @@ module ADN
     def delete
       result = ADN::API::Post.delete(self.id)
       Post.new(result["data"]) unless ADN.has_error?(result)
+    end
+    
+    def set_values(values)
+      values.each do |k, v|
+        self.send("#{k}=", v) if self.respond_to?("#{k}=")
+      end
     end
   end
 end
