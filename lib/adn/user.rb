@@ -12,9 +12,9 @@ module ADN
     def initialize(user)
       if user.respond_to?(:each_pair)
         set_values(user)
-        user_id = id
+        self.user_id = id
       else
-        user_id = user
+        self.user_id = user
         user_details = details
         if details.has_key? "data"
           set_values(user_details["data"])
@@ -31,7 +31,7 @@ module ADN
     end
 
     def created_at
-      DateTime.parse(created_at)
+      DateTime.parse(@created_at)
     end
 
     # Followers/Users
@@ -97,7 +97,7 @@ module ADN
       result = ADN::API::Post.mentioning_user(user_id, params)
       ADN.create_collection(result["data"], Post) unless ADN.has_error?(result)
     end
-    
+
     def set_values(values)
       values.each_pair { |k, v| send("#{k}=", v) if respond_to?("#{k}=") }
     end
