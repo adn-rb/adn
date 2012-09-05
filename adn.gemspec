@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
   s.name        = 'adn'
   s.version     = ADN::VERSION
   s.authors     = ["Kishyr Ramdial", "Dave Goodchild", "Peter Hellberg"]
-  s.email       = "kishyr@gmail.com"
+  s.email       = ["kishyr@gmail.com", "buddhamagnet@gmail.com", "peter@c7.se"]
   s.description = "A simple and easy to use library to interact with App.net's API"
   s.summary     = "A Ruby library for App.net"
   s.homepage    = "https://github.com/kishyr/ADNRuby"
