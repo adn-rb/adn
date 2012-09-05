@@ -42,17 +42,17 @@ module ADN
 
     def reply_to_post
       result = ADN::API::Post.by_id(reply_to)
-      ADN.create_collection(result["data"], "single", Post) unless ADN.has_error?(result)
+      ADN.create_instance(result["data"], Post) unless ADN.has_error?(result)
     end
 
     def replies(params = nil)
       result = ADN::API::Post.replies(id, params)
-      ADN.create_collection(result["data"], "collection", Post) unless ADN.has_error?(result)
+      ADN.create_collection(result["data"], Post) unless ADN.has_error?(result)
     end
 
     def delete
       result = ADN::API::Post.delete(id)
-      ADN.create_collection(result["data"], "single", Post) unless ADN.has_error?(result)
+      ADN.create_instance(result["data"], Post) unless ADN.has_error?(result)
     end
     
     def set_values(values)

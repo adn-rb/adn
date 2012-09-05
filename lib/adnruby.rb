@@ -45,8 +45,12 @@ module ADN
     hash.has_key?("error")
   end
   
-  def self.create_collection(data, mode, type)
-    mode == "collection" ? data.collect { |t| type.new(t) } : type.new(data)
+  def self.create_instance(data, type)
+    type.new(data)
+  end
+  
+  def self.create_collection(data, type)
+    data.collect { |t| type.new(t) }
   end
 
   private
