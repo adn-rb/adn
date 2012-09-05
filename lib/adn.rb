@@ -44,11 +44,11 @@ module ADN
   def self.has_error?(hash)
     hash.has_key?("error")
   end
-  
+
   def self.create_instance(data, type)
     type.new(data)
   end
-  
+
   def self.create_collection(data, type)
     data.collect { |t| type.new(t) }
   end
