@@ -8,7 +8,7 @@ module ADN
 
     def self.send_post(params)
       result = ADN::API::Post.create(params)
-      Post.new(result["data"]) unless ADN.has_error?(result)
+      new(result["data"]) unless ADN.has_error?(result)
     end
 
     def initialize(raw_post)
