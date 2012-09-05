@@ -4,7 +4,7 @@ module ADN
   module API
     module Token
       def self.current
-        result = ADN.get(ADN::API_ENDPOINT_TOKEN)
+        result = ADN::API.get(ADN::API_ENDPOINT_TOKEN)
         result["data"] unless ADN.has_error?(result)
       end
     end
