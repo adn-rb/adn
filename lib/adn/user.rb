@@ -10,31 +10,21 @@ module ADN
                   :you_follow, :you_muted
 
     def initialize(user)
-      if user.is_a? Hash
-        user.each do |k, v|
-          self.instance_variable_set "@#{k}", v
-        end
-        @user_id = self.id
+      if user.respond_to?(:each_pair)
+        set_values(user)
+        user_id = id
       else
-        @user_id = user
-        details = self.details
+        user_id = user
+        user_details = details
         if details.has_key? "data"
-          details["data"].each do |k, v|
-            self.instance_variable_set "@#{k}", v
-          end
+          set_values(user_details["data"])
         end
       end
     end
 
     def details
-      if self.id
-        # TODO: Replace with call to each_with_object
-        #       after the spec has been written
-        h = {}
-        self.instance_variables.each { |iv|
-          h[iv.to_s.gsub(/[^a-zA-Z0-9_]/, '')] = self.instance_variable_get(iv)
-        }
-        h
+      if id
+        Hash[self.instance_variables.map { |i| [i.to_s.slice(1..-1), self.instance_variable_get(i)]}]
       else
         ADN::API::User.retrieve(user_id)
       end
@@ -43,7 +33,6 @@ module ADN
     def created_at
       DateTime.parse(created_at)
     end
-
 
     # Followers/Users
 
@@ -54,64 +43,64 @@ module ADN
     def follow(user)
       user_id = get_user(user)
       result = ADN.post("/stream/0/users/#{user_id}/follow")
-      User.new(result["data"]) unless ADN.has_error?(result)
+      ADN.create_collection(result["data"], "single", User) unless ADN.has_error?(result)
     end
 
     def unfollow(user)
       user_id = get_user(user)
       result = ADN.delete("/stream/0/users/#{user_id}/follow")
-      User.new(result["data"]) unless ADN.has_error?(result)
+      ADN.create_collection(result["data"], "single", User) unless ADN.has_error?(result)
     end
 
     def followers
       result = ADN::API::User.followers(user_id)
-      result["data"].collect { |u| User.new(u) } unless ADN.has_error?(result)
+      ADN.create_collection(result["data"], "collection", User) unless ADN.has_error?(result)
     end
 
     def following
       result = ADN::API::User.following(user_id)
-      result["data"].collect { |u| User.new(u) } unless ADN.has_error?(result)
+      ADN.create_collection(result["data"], "collection", User) unless ADN.has_error?(result)
     end
-
 
     # Mute
 
     def mute(user)
       user_id = get_user(user)
       result = ADN.post("#{ADN::API_ENDPOINT_USERS}/#{user_id}/mute")
-      User.new(result["data"]) unless ADN.has_error?(result)
+      ADN.create_collection(result["data"], "single", User) unless ADN.has_error?(result)
     end
 
     def unmute(user)
       user_id = get_user(user)
       result = ADN.delete("#{ADN::API_ENDPOINT_USERS}/#{user_id}/mute")
-      User.new(result["data"]) unless ADN.has_error?(result)
+      ADN.create_collection(result["data"], "single", User) unless ADN.has_error?(result)
     end
 
     def mute_list
       result = ADN.get("#{ADN::API_ENDPOINT_USERS}/me/muted")
-      result["data"].collect { |u| User.new(u) } unless ADN.has_error?(result)
+      ADN.create_collection(result["data"], "collection", User) unless ADN.has_error?(result)
     end
-
 
     # Posts
 
     def posts(params = nil)
       result = ADN::API::Post.by_user(user_id, params)
-      result["data"].collect { |p| Post.new(p) } unless ADN.has_error?(result)
+      ADN.create_collection(result["data"], "collection", Post) unless ADN.has_error?(result)
     end
 
     def stream(params = nil)
       result = ADN::API::Post.stream(params)
-      result["data"].collect { |p| Post.new(p) } unless ADN.has_error?(result)
+      ADN.create_collection(result["data"], "collection", Post) unless ADN.has_error?(result)
     end
 
     def mentions(params = nil)
       result = ADN::API::Post.mentioning_user(user_id, params)
-      result["data"].collect { |p| Post.new(p) } unless ADN.has_error?(result)
+      ADN.create_collection(result["data"], "collection", Post) unless ADN.has_error?(result)
     end
-
-    # Errors
+    
+    def set_values(values)
+      values.each_pair { |k, v| send("#{k}=", v) if respond_to?("#{k}=") }
+    end
 
     def has_error?
       self.id.nil?
