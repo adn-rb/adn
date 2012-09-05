@@ -15,10 +15,10 @@ require "find"
   Find.find(load_path) { |f| require f if f.match(/\.rb$/) }
 end
 
-def arg(m, k = ADN, &b)
+def arg(m, k = ADN::API, &b)
   k.stub(m,->(a){a}, &b)
 end
 
-def args(m, k = ADN, &b)
+def args(m, k = ADN::API, &b)
   k.stub(m,->(*a){a}, &b)
 end
