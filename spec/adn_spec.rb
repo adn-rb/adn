@@ -23,6 +23,10 @@ describe ADN do
     ADN::API_ENDPOINT_POSTS.must_equal '/stream/0/posts'
     ADN::API_ENDPOINT_USERS.must_equal '/stream/0/users'
   end
+  
+  it "has constants containing the API endpoints for tokens" do
+    ADN::API_ENDPOINT_TOKEN.must_equal '/stream/0/token'
+  end
 
   # TODO: Move into the ADN module, and rename using snake case
   #       Should probably be refactored to a separate class
