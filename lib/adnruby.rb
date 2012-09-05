@@ -58,7 +58,7 @@ module ADN
   end
 
   def self.get(url, params = nil)
-    get_url = params.nil? ? url : "#{url}?#{URI.encode_www_form(params)}"
+    get_url = params.nil? ? url : [url, URL.encode_www_form(params)].join("?")
     self.get_response(Net::HTTP::Get.new(get_url))
   end
 
