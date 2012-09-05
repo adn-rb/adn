@@ -1,5 +1,5 @@
 #
-# ADNRuby - A simple and easy to use App.net Ruby library
+# ADN - A simple and easy to use App.net Ruby library
 #
 # Copyright (c) 2012 Kishyr Ramdial
 #
@@ -29,7 +29,7 @@ require 'date'
 %w{constants api post user version}.each { |f| require_relative "adn/#{f}" }
 
 module ADN
-  
+
   class ADNError < StandardError; end
   class APIError < StandardError; end
 
@@ -44,7 +44,7 @@ module ADN
   def self.has_error?(hash)
     hash.has_key?("error")
   end
-  
+
   def self.create_collection(data, mode, type)
     mode == "collection" ? data.collect { |t| type.new(t) } : type.new(data)
   end
