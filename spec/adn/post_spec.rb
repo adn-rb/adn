@@ -31,8 +31,7 @@ describe ADN::Post do
 
   describe "send_post" do
     it "creates a post via the API" do
-      # TODO: Rename the API method to create
-      ADN::API::Post.stub(:new, d(post_data)) do
+      ADN::API::Post.stub(:create, d(post_data)) do
         p = subject.send_post({})
         p.text.must_equal 'The sky above the port…'
       end

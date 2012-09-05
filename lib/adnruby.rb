@@ -29,6 +29,9 @@ require 'date'
 %w{constants api post user version}.each { |f| require_relative "adn/#{f}" }
 
 module ADN
+  
+  class ADNError < StandardError; end
+  class APIError < StandardError; end
 
   def self.token=(token)
     @token = token
@@ -41,6 +44,10 @@ module ADN
   def self.has_error?(hash)
     hash.has_key?("error")
   end
+  
+  def self.create_collection(data, mode, type)
+    mode == "collection" ? data.collect { |t| type.new(t) } : type.new(data)
+  end
 
   private
 
@@ -51,7 +58,7 @@ module ADN
   end
 
   def self.get(url, params = nil)
-    get_url = params.nil? ? url : "#{url}?#{URI.encode_www_form(params)}"
+    get_url = params.nil? ? url : [url, URL.encode_www_form(params)].join("?")
     self.get_response(Net::HTTP::Get.new(get_url))
   end
 

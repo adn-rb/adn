@@ -10,7 +10,7 @@ describe ADN::API::Post do
   describe "new" do
     it "posts the passed in params to the API" do
       args(:post) {
-        path, params = subject.new({ foo: 'bar' })
+        path, params = subject.create({ foo: 'bar' })
 
         path.must_equal base_path
         params.must_equal foo: 'bar'

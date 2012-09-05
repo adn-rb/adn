@@ -3,7 +3,7 @@
 module ADN
   module API
     module Post
-      def self.new(params)
+      def self.create(params)
         ADN.post("#{ADN::API_ENDPOINT_POSTS}", params)
       end
 
