@@ -22,3 +22,9 @@ end
 def args(m, k = ADN::API, &b)
   k.stub(m,->(*a){a}, &b)
 end
+
+def fixture(file_name)
+  JSON.parse IO.read(
+    File.dirname(__FILE__) + "/fixtures/#{file_name}"
+  )
+end
