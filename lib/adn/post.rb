@@ -7,7 +7,7 @@ module ADN
                   :source, :text, :thread_id, :user
 
     def self.send_post(params)
-      result = ADN::API::Post.new(params)
+      result = ADN::API::Post.create(params)
       Post.new(result["data"]) unless ADN.has_error?(result)
     end
 
