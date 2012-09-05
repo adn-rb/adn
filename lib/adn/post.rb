@@ -26,7 +26,7 @@ module ADN
 
     def details
       if self.id
-        Hash[self.instance_variables.map { |i| [i.to_s, self.instance_variable_get(i).to_s.gsub(/[^a-zA-Z0-9_]/, '')]}]
+        Hash[self.instance_variables.map { |i| [i.to_s.gsub(/[^a-zA-Z0-9_]/, ''), self.instance_variable_get(i)]}]
       else
         ADN::API::Post.by_id(post_id)
       end
