@@ -1,5 +1,5 @@
-ADNRuby
-=======
+ADN
+===
 
 [![Build Status](https://secure.travis-ci.org/kishyr/ADNRuby.png)](http://travis-ci.org/kishyr/ADNRuby)
 
@@ -9,7 +9,7 @@ This library follows the current [App.net API Spec](https://github.com/appdotnet
 
 ### Contributors
 
-ADNRuby is brought to you by these very handsome gentlemen:
+ADN is brought to you by these very handsome gentlemen:
 
 * Kishyr Ramdial ([@kishyr](https://alpha.app.net/kishyr))
 * Dave Goodchild ([@buddhamagnet](https://alpha.app.net/buddhamagnet))
@@ -17,19 +17,19 @@ ADNRuby is brought to you by these very handsome gentlemen:
 
 ### Installation
 
-Simply add ADNRuby to your Gemfile:
+Simply add ADN to your Gemfile:
 
-`gem "adnruby"`
+`gem "adn"`
 
-Or you can install ADNRuby directly from rubygems.org:
+Or you can install ADN directly from rubygems.org:
 
-`gem install adnruby`
+`gem install adn`
 
 ### Usage
 For API calls that accept parameters described in the App.net API Spec, simply pass them as a dictionary to the method.  
 
 ```ruby
-  require 'adnruby'
+  require 'adn'
 
   ADN.token = "your App.net OAuth-token here."
 
@@ -57,7 +57,7 @@ Complete documentation will be available soon, but in the meantime you can brows
 
 ### License
 
-**ADNRuby** is licensed under the MIT License and is Copyright (c) 2012 Kishyr Ramdial.  
+**ADN** is licensed under the MIT License and is Copyright (c) 2012 Kishyr Ramdial.  
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
