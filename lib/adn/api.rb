@@ -6,10 +6,20 @@ end
 
 module ADN
   module API
+    class Response < Hash
+      def has_error?
+        has_key?("error")
+      end
+    end
+    
     def self.get_response(request)
       request.add_field("Authorization", "Bearer #{ADN.token}")
       response = ADN::HTTP.request(request)
-      JSON.parse(response.body)
+      response_hash = ADN::API::Response.new
+      JSON.parse(response.body).each_pair do |k, v|
+        response_hash[k] = v;
+      end
+      response_hash
     end
 
     def self.get(url, params = nil)
