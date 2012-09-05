@@ -3,7 +3,7 @@
 require File.expand_path('../lib/adn/version', __FILE__)
 
 Gem::Specification.new do |s|
-  s.name        = 'adnruby'
+  s.name        = 'adn'
   s.version     = ADN::VERSION
   s.authors     = ["Kishyr Ramdial", "Dave Goodchild", "Peter Hellberg"]
   s.email       = "kishyr@gmail.com"
