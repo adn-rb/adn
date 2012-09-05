@@ -37,7 +37,7 @@ module ADN
     end
 
     def user
-      ADN::User.new @user
+      ADN::User.new(@user)
     end
 
     def reply_to_post
@@ -56,9 +56,7 @@ module ADN
     end
     
     def set_values(values)
-      values.each_pair do |k, v|
-        send("#{k}=", v) if respond_to?("#{k}=")
-      end
+      values.each_pair { |k, v| send("#{k}=", v) if respond_to?("#{k}=") }
     end
   end
 end
