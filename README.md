@@ -1,6 +1,8 @@
 ADNRuby
 =======
 
+[![Build Status](https://secure.travis-ci.org/kishyr/ADNRuby.png)](http://travis-ci.org/kishyr/ADNRuby)
+
 A Ruby library for App.net by [@kishyr](https://alpha.app.net/kishyr). 
 
 This library follows the current [App.net API Spec](https://github.com/appdotnet/api-spec) (as at 26 August 2012).  
