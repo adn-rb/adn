@@ -1,25 +1,23 @@
 # encoding: UTF-8
 
+require 'delegate'
+
 %w{filter post stream subscription token user}.each do |f|
   require_relative "api/#{f}"
 end
 
 module ADN
   module API
-    class Response < Hash
+    class Response < SimpleDelegator
       def has_error?
         has_key?("error")
       end
     end
-    
+
     def self.get_response(request)
       request.add_field("Authorization", "Bearer #{ADN.token}")
       response = ADN::HTTP.request(request)
-      response_hash = ADN::API::Response.new
-      JSON.parse(response.body).each_pair do |k, v|
-        response_hash[k] = v;
-      end
-      response_hash
+      Response.new(JSON.parse(response.body))
     end
 
     def self.get(url, params = nil)
