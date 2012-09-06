@@ -2,3 +2,6 @@ language: ruby
 bundler_args: --without documentation
 rvm:
   - 1.9.3
+branches:
+  only:
+    - master
