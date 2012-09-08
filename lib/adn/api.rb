@@ -17,7 +17,7 @@ module ADN
     def self.get_response(request)
       request.add_field("Authorization", "Bearer #{ADN.token}")
       self.make_request do
-        response = ADN::HTTP.request(request)
+        ADN::HTTP.request(request)
       end
       Response.new(JSON.parse(response.body))
     end
