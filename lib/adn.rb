@@ -40,10 +40,6 @@ module ADN
     @token
   end
 
-  def self.has_error?(hash)
-    hash.has_key?("error")
-  end
-
   def self.create_instance(data, type)
     type.new(data)
   end

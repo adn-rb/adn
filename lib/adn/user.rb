@@ -43,23 +43,23 @@ module ADN
     def follow(user)
       user_id = get_user(user)
       result = ADN.post("/stream/0/users/#{user_id}/follow")
-      ADN.create_instance(result["data"], User) unless result.has_error?
+      ADN.create_instance(result["data"], User)
     end
 
     def unfollow(user)
       user_id = get_user(user)
       result = ADN.delete("/stream/0/users/#{user_id}/follow")
-      ADN.create_instance(result["data"], User) unless result.has_error?
+      ADN.create_instance(result["data"], User)
     end
 
     def followers
       result = ADN::API::User.followers(user_id)
-      ADN.create_collection(result["data"], User) unless result.has_error?
+      ADN.create_collection(result["data"], User)
     end
 
     def following
       result = ADN::API::User.following(user_id)
-      ADN.create_collection(result["data"], User) unless result.has_error?
+      ADN.create_collection(result["data"], User)
     end
 
     # Mute
@@ -67,35 +67,35 @@ module ADN
     def mute(user)
       user_id = get_user(user)
       result = ADN.post("#{ADN::API_ENDPOINT_USERS}/#{user_id}/mute")
-      ADN.create_instance(result["data"], User) unless result.has_error?
+      ADN.create_instance(result["data"], User)
     end
 
     def unmute(user)
       user_id = get_user(user)
       result = ADN.delete("#{ADN::API_ENDPOINT_USERS}/#{user_id}/mute")
-      ADN.create_instance(result["data"], User) unless result.has_error?
+      ADN.create_instance(result["data"], User)
     end
 
     def mute_list
       result = ADN.get("#{ADN::API_ENDPOINT_USERS}/me/muted")
-      ADN.create_collection(result["data"], User) unless result.has_error?
+      ADN.create_collection(result["data"], User)
     end
 
     # Posts
 
     def posts(params = nil)
       result = ADN::API::Post.by_user(user_id, params)
-      ADN.create_collection(result["data"], Post) unless result.has_error?
+      ADN.create_collection(result["data"], Post)
     end
 
     def stream(params = nil)
       result = ADN::API::Post.stream(params)
-      ADN.create_collection(result["data"], Post) unless result.has_error?
+      ADN.create_collection(result["data"], Post)
     end
 
     def mentions(params = nil)
       result = ADN::API::Post.mentioning_user(user_id, params)
-      ADN.create_collection(result["data"], Post) unless result.has_error?
+      ADN.create_collection(result["data"], Post)
     end
 
     def set_values(values)

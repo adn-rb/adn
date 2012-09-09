@@ -8,7 +8,7 @@ module ADN
 
     def self.send_post(params)
       result = ADN::API::Post.create(params)
-      Post.new(result["data"]) unless result.has_error?
+      Post.new(result["data"])
     end
 
     def initialize(raw_post)
@@ -42,17 +42,17 @@ module ADN
 
     def reply_to_post
       result = ADN::API::Post.by_id(reply_to)
-      ADN.create_instance(result["data"], Post) unless result.has_error?
+      ADN.create_instance(result["data"], Post)
     end
 
     def replies(params = nil)
       result = ADN::API::Post.replies(id, params)
-      ADN.create_collection(result["data"], Post) unless result.has_error?
+      ADN.create_collection(result["data"], Post)
     end
 
     def delete
       result = ADN::API::Post.delete(id)
-      ADN.create_instance(result["data"], Post) unless result.has_error?
+      ADN.create_instance(result["data"], Post)
     end
 
     def set_values(values)
