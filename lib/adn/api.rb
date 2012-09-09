@@ -19,7 +19,7 @@ module ADN
       end
 
       def get(url, params = nil)
-        url = params.nil? ? url : [url, URL.encode_www_form(params)].join("?")
+        url = params.nil? ? url : [url, URI.encode_www_form(params)].join("?")
         request = Net::HTTP::Get.new(url)
         perform(request)
       end
