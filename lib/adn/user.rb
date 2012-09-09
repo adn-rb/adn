@@ -9,12 +9,16 @@ module ADN
                   :locale, :name, :timezone, :type, :username,
                   :you_follow, :you_muted
 
+    def self.me
+      new ADN::API::Token.current['user']
+    end
+
     def initialize(user)
       if user.respond_to?(:each_pair)
         set_values(user)
-        self.user_id = id
+        self.user_id = id.to_s
       else
-        self.user_id = user
+        self.user_id = user.to_s
         user_details = details
         if details.has_key? "data"
           set_values(user_details["data"])

@@ -9,6 +9,16 @@ describe ADN::User do
   let(:user) { subject.new(user_data) }
   let(:user_data) { fixture('user.json') }
 
+  describe "me" do
+    it "retrieves the user based on the current token" do
+      ADN::API::Token.stub(:current, { "user" => user_data }) do
+        u = subject.me
+        u.user_id.must_equal "4821"
+        u.username.must_equal "peterhellberg"
+      end
+    end
+  end
+
   describe "initialize" do
     it "populates the accessors based on the raw user data passed in" do
       u = subject.new(user_data)
@@ -18,7 +28,7 @@ describe ADN::User do
     # TODO: Remove this behavior, wrong level of abstraction
     it "populates the accessors based on the user id passed in" do
       ADN::API::User.stub(:retrieve, { "data" => user_data }) do
-        u = subject.new("4821")
+        u = subject.new(4821)
         u.name.must_equal "Peter Hellberg"
         u.user_id.must_equal "4821"
       end
