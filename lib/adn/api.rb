@@ -6,41 +6,40 @@ end
 
 module ADN
   module API
-    def self.get_response(request)
-      request.add_field("Authorization", "Bearer #{ADN.token}")
+    class Error < StandardError; end
 
-      self.make_request do
-        response = ADN::HTTP.request(request)
-        Response.new(JSON.parse(response.body))
+    class << self
+      def perform(request)
+        request.add_field("Authorization", "Bearer #{ADN.token}")
+        response = JSON.parse ADN::HTTP.request(request).body
+
+        Response.new(response).tap { |r|
+          raise ADN::API::Error, r['error'] if r.has_error?
+        }
       end
-    end
 
-    def self.make_request(&block)
-      response = block.call
-      raise ADN::APIError, response["error"] if response.has_error?
-      response
-    end
+      def get(url, params = nil)
+        url = params.nil? ? url : [url, URL.encode_www_form(params)].join("?")
+        request = Net::HTTP::Get.new(url)
+        perform(request)
+      end
 
-    def self.get(url, params = nil)
-      get_url = params.nil? ? url : [url, URL.encode_www_form(params)].join("?")
-      self.get_response(Net::HTTP::Get.new(get_url))
-    end
+      def post(url, params = nil)
+        request = Net::HTTP::Post.new(url)
+        request.set_form_data(params) if params
+        perform(request)
+      end
 
-    def self.post(url, params = nil)
-      request = Net::HTTP::Post.new(url)
-      request.set_form_data(params) if params
-      self.get_response(request)
-    end
+      def put(url, params = nil)
+        request = Net::HTTP::Put.new(url)
+        request.set_form_data(params) if params
+        perform(request)
+      end
 
-    def self.put(url, params = nil)
-      request = Net::HTTP::Put.new(url)
-      request.set_form_data(params) if params
-      self.get_response(request)
-    end
-
-    def self.delete(url, params = nil)
-      request = Net::HTTP::Delete.new(url)
-      self.get_response(request)
+      def delete(url)
+        request = Net::HTTP::Delete.new(url)
+        perform(request)
+      end
     end
   end
 end
