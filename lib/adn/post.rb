@@ -54,7 +54,7 @@ module ADN
       result = ADN::API::Post.delete(id)
       ADN.create_instance(result["data"], Post) unless result.has_error?
     end
-    
+
     def set_values(values)
       values.each_pair { |k, v| send("#{k}=", v) if respond_to?("#{k}=") }
     end
