@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-%w{filter post stream subscription token user}.each do |f|
+%w{response filter post stream subscription token user}.each do |f|
   require_relative "api/#{f}"
 end
 
@@ -8,8 +8,16 @@ module ADN
   module API
     def self.get_response(request)
       request.add_field("Authorization", "Bearer #{ADN.token}")
-      response = ADN::HTTP.request(request)
-      JSON.parse(response.body)
+      self.make_request do
+        ADN::HTTP.request(request)
+      end
+      Response.new(JSON.parse(response.body))
+    end
+
+    def self.make_request(&block)
+      response = block.call
+      raise ADN::APIError, response["error"] and return if response.has_error?
+      response
     end
 
     def self.get(url, params = nil)

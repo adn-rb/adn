@@ -85,7 +85,9 @@ describe ADN::Post do
 
   describe "reply_to_post" do
     it "returns the post that was replied to" do
-      ADN::API::Post.stub(:by_id, ->(id){ d({ "id" => id }) }) do
+      ADN::API::Post.stub(:by_id, ->(id){
+        ADN::API::Response.new("data" => { "id" => id })
+      }) do
         post.reply_to_post.id.must_equal 66
       end
     end
@@ -93,9 +95,9 @@ describe ADN::Post do
 
   describe "replies" do
     it "returns a list of posts" do
-      data = { "data" => [{ text: 'foo' }, { text: 'bar'}]}
+      response = ADN::API::Response.new("data" => [{ text: "foo"}, {text: "bar"}])
 
-      ADN::API::Post.stub(:replies, ->(*a){ data }) do
+      ADN::API::Post.stub(:replies, ->(*a){ response }) do
         r = post.replies
         r.size.must_equal 2
         r[0].text.must_equal 'foo'
@@ -106,7 +108,9 @@ describe ADN::Post do
 
   describe "delete" do
     it "deletes the post via the API and returns a new post" do
-      delete_stub = ->(id){ d({ "id" => id*2 }) }
+      delete_stub = ->(id){
+        ADN::API::Response.new("data" => { "id" => id*2 })
+      }
 
       ADN::API::Post.stub(:delete, delete_stub) do
         post.delete.id.must_equal 20002
