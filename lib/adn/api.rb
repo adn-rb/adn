@@ -1,19 +1,11 @@
 # encoding: UTF-8
 
-require 'delegate'
-
-%w{filter post stream subscription token user}.each do |f|
+%w{response filter post stream subscription token user}.each do |f|
   require_relative "api/#{f}"
 end
 
 module ADN
   module API
-    class Response < SimpleDelegator
-      def has_error?
-        has_key?("error")
-      end
-    end
-
     def self.get_response(request)
       request.add_field("Authorization", "Bearer #{ADN.token}")
       self.make_request do
@@ -21,7 +13,7 @@ module ADN
       end
       Response.new(JSON.parse(response.body))
     end
-    
+
     def self.make_request(&block)
       response = block.call
       raise ADN::APIError, response["error"] and return if response.has_error?
