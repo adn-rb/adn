@@ -8,15 +8,16 @@ module ADN
   module API
     def self.get_response(request)
       request.add_field("Authorization", "Bearer #{ADN.token}")
+
       self.make_request do
-        ADN::HTTP.request(request)
+        response = ADN::HTTP.request(request)
+        Response.new(JSON.parse(response.body))
       end
-      Response.new(JSON.parse(response.body))
     end
 
     def self.make_request(&block)
       response = block.call
-      raise ADN::APIError, response["error"] and return if response.has_error?
+      raise ADN::APIError, response["error"] if response.has_error?
       response
     end
 
