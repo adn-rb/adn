@@ -6,7 +6,7 @@ end
 
 module ADN
   module API
-    class Error < StandardError; end
+    Error = Class.new StandardError
 
     class << self
       def perform(request)

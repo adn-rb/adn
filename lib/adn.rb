@@ -30,7 +30,7 @@ require 'date'
 %w{constants api post user version}.each { |f| require_relative "adn/#{f}" }
 
 module ADN
-  class Error < StandardError; end
+  Error = Class.new StandardError
 
   def self.token=(token)
     @token = token
