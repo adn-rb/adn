@@ -8,6 +8,8 @@ module ADN
   API_ENDPOINT_POSTS = "#{API_ENDPOINT}/posts"
   API_ENDPOINT_USERS = "#{API_ENDPOINT}/users"
   API_ENDPOINT_TOKEN = "#{API_ENDPOINT}/token"
+  API_ENDPOINT_SUBSCRIPTION = "#{API_ENDPOINT}/subscriptions"
+  
   HTTP = Net::HTTP.new(API_HOST, 443)
 
   HTTP.use_ssl = true
