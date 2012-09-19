@@ -13,28 +13,12 @@ module ADN
       new ADN::API::Token.current['user']
     end
 
-    def initialize(user)
-      if user.respond_to?(:each_pair)
-        set_values(user)
-        self.user_id = id.to_s
-      else
-        self.user_id = user.to_s
-        user_details = details
-        if details.has_key? "data"
-          set_values(user_details["data"])
-        end
-      end
+    def self.find(user_id)
+      new ADN::API::User.retrieve(user_id)
     end
 
-    def details
-      if id
-        value = self.instance_variables.map do |i|
-          [i.to_s.slice(1..-1), self.instance_variable_get(i)]
-        end
-        Hash[value]
-      else
-        ADN::API::User.retrieve(user_id)
-      end
+    def initialize(user_data = {})
+      set_values(user_data)
     end
 
     def created_at
@@ -43,20 +27,16 @@ module ADN
 
     # Followers/Users
 
-    def get_user(user)
-      user.is_a?(ADN::User) ? user.id : user
-    end
-
     def follow(user)
-      user_id = get_user(user)
-      result = ADN.post("/stream/0/users/#{user_id}/follow")
+      result = ADN.post("/stream/0/users/#{user.user_id}/follow")
       ADN.create_instance(result["data"], User)
     end
 
     def unfollow(user)
-      user_id = get_user(user)
-      result = ADN.delete("/stream/0/users/#{user_id}/follow")
-      ADN.create_instance(result["data"], User)
+      if user.valid_user?
+        result = ADN.delete("/stream/0/users/#{user.user_id}/follow")
+        ADN.create_instance(result["data"], User)
+      end
     end
 
     def followers
@@ -72,15 +52,17 @@ module ADN
     # Mute
 
     def mute(user)
-      user_id = get_user(user)
-      result = ADN.post("#{ADN::API_ENDPOINT_USERS}/#{user_id}/mute")
-      ADN.create_instance(result["data"], User)
+      if user.valid_user?
+        result = ADN.post("#{ADN::API_ENDPOINT_USERS}/#{user.user_id}/mute")
+        ADN.create_instance(result["data"], User)
+      end
     end
 
     def unmute(user)
-      user_id = get_user(user)
-      result = ADN.delete("#{ADN::API_ENDPOINT_USERS}/#{user_id}/mute")
-      ADN.create_instance(result["data"], User)
+      if user.valid_user?
+        result = ADN.delete("#{ADN::API_ENDPOINT_USERS}/#{user.user_id}/mute")
+        ADN.create_instance(result["data"], User)
+      end
     end
 
     def mute_list
@@ -105,12 +87,15 @@ module ADN
       ADN.create_collection(result["data"], Post)
     end
 
-    def set_values(values)
-      values.each_pair { |k, v| send("#{k}=", v) if respond_to?("#{k}=") }
+    def valid_user?
+      !!user_id.match(/^\d+$/)
     end
 
-    def has_error?
-      self.id.nil?
+    def set_values(values)
+      if values.respond_to? :each_pair
+        values.each_pair { |k, v| send("#{k}=", v) if respond_to?("#{k}=") }
+        self.user_id = id.to_s
+      end
     end
   end
 end

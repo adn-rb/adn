@@ -5,9 +5,9 @@ require_relative '../spec_helper'
 describe ADN::User do
   subject { ADN::User }
 
-  let(:empty_user) { subject.new({}) }
-  let(:user) { subject.new(user_data) }
-  let(:user_data) { fixture('user.json') }
+  let(:empty_user) { subject.new({})        }
+  let(:user)       { subject.new(user_data) }
+  let(:user_data)  { fixture('user.json')   }
 
   describe "me" do
     it "retrieves the user based on the current token" do
@@ -19,40 +19,27 @@ describe ADN::User do
     end
   end
 
-  describe "initialize" do
-    it "populates the accessors based on the raw user data passed in" do
-      u = subject.new(user_data)
-      u.user_id.must_equal "4821"
-    end
-
-    # TODO: Remove this behavior, wrong level of abstraction
-    it "populates the accessors based on the user id passed in" do
-      ADN::API::User.stub(:retrieve, { "data" => user_data }) do
-        u = subject.new(4821)
+  describe "find" do
+    it "retrieves the user data from the API and returns a User object" do
+      ADN::API::User.stub(:retrieve, user_data) do
+        u = subject.find("4821")
         u.name.must_equal "Peter Hellberg"
         u.user_id.must_equal "4821"
       end
     end
   end
 
-  describe "details" do
-    it "spec_name" do
+  describe "initialize" do
+    it "populates the accessors based on the raw user data passed in" do
+      u = subject.new(user_data)
+      u.name.must_equal "Peter Hellberg"
+      u.user_id.must_equal "4821"
     end
   end
 
   describe "created_at" do
     it "it returns the date and time the user was created" do
       user.created_at.to_s.must_equal '2012-08-17T00:38:18+00:00'
-    end
-  end
-
-  # TODO: Change the name to describe what
-  #       it actually returns (user_id) or
-  #       remove it completely
-  describe "get_user" do
-    it "returns a user id for some reason" do
-      empty_user.get_user(user).must_equal "4821"
-      empty_user.get_user(123).must_equal 123
     end
   end
 
@@ -115,13 +102,13 @@ describe ADN::User do
     end
   end
 
-  describe "has_error?" do
-    it "returns true if no id" do
-      empty_user.has_error?.must_equal true
+  describe "valid_user?" do
+    it "returns false if no id" do
+      empty_user.valid_user?.must_equal false
     end
 
-    it "returns false if the user has an id" do
-      user.has_error?.must_equal false
+    it "returns true if the user has an id" do
+      user.valid_user?.must_equal true
     end
   end
 end
