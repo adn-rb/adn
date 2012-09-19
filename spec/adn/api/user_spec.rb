@@ -13,14 +13,6 @@ describe ADN::API::User do
     end
   end
 
-  describe "by_id" do
-    it "is just an alias for retrieve" do
-      subject.stub(:retrieve, 'foo') do
-        subject.by_id(123).must_equal 'foo'
-      end
-    end
-  end
-
   describe "following" do
     it "retrieves the following list" do
       arg(:get) { subject.following(44).must_equal base_path + "44/following" }
