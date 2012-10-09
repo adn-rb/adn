@@ -28,7 +28,10 @@ module ADN
 
     def details
       if id
-        Hash[self.instance_variables.map { |i| [i.to_s.slice(1..-1), self.instance_variable_get(i)]}]
+        value = self.instance_variables.map do |i|
+          [i.to_s.slice(1..-1), self.instance_variable_get(i)]
+        end
+        Hash[value]
       else
         ADN::API::User.retrieve(user_id)
       end

@@ -95,7 +95,8 @@ describe ADN::Post do
 
   describe "replies" do
     it "returns a list of posts" do
-      response = ADN::API::Response.new("data" => [{ text: "foo"}, {text: "bar"}])
+      response = ADN::API::Response.new(
+        "data" => [{ text: "foo"}, {text: "bar"}])
 
       ADN::API::Post.stub(:replies, ->(*a){ response }) do
         r = post.replies
