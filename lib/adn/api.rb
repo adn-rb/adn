@@ -1,6 +1,8 @@
 # encoding: UTF-8
 
-%w{response filter post stream subscription token user}.each { |f| require_relative "api/#{f}" }
+%w{response filter post stream subscription token user}.each do |f| 
+  require_relative "api/#{f}"
+end
 
 module ADN
   module API
