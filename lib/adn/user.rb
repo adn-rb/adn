@@ -7,7 +7,7 @@ module ADN
       :created_at, :description, :follows_you,
       :id, :is_follower, :is_following, :is_muted,
       :locale, :name, :timezone, :type, :username,
-      :you_follow, :you_muted) 
+      :you_follow, :you_muted)
 
     def self.me
       new ADN::API::Token.current["user"]

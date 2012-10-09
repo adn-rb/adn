@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-%w{response filter post stream subscription token user}.each do |f| 
+%w{response filter post stream subscription token user}.each do |f|
   require_relative "api/#{f}"
 end
 
@@ -17,7 +17,7 @@ module ADN
           raise ADN::API::Error, r['error'] if r.has_error?
         }
       end
-      
+
       def construct_request(verb, url)
         http_method = case verb
           when :post then Net::HTTP::Post

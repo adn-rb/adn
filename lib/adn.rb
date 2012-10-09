@@ -31,7 +31,7 @@ require 'date'
 
 module ADN
   Error = Class.new StandardError
-  
+
   class << self
     attr_accessor :token
   end
