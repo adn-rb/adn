@@ -2,9 +2,10 @@
 
 module ADN
   class Post
-    attr_accessor :post_id, :created_at, :entities,
-                  :html, :id, :num_replies, :reply_to,
-                  :source, :text, :thread_id, :user
+    attr_accessor(
+      :post_id, :created_at, :entities,
+      :html, :id, :num_replies, :reply_to,
+      :source, :text, :thread_id, :user)
 
     def self.send_post(params)
       result = ADN::API::Post.create(params)
