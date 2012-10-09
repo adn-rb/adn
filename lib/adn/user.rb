@@ -10,7 +10,7 @@ module ADN
       :you_follow, :you_muted) 
 
     def self.me
-      new ADN::API::Token.current['user']
+      new ADN::API::Token.current["user"]
     end
 
     def self.find(user_id)
