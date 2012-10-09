@@ -28,13 +28,13 @@ module ADN
     # Followers/Users
 
     def follow(user)
-      result = ADN.post("/stream/0/users/#{user.user_id}/follow")
+      result = ADN.post("#{ADN::API_ENDPOINT_USERS}/#{user.user_id}/follow")
       ADN.create_instance(result["data"], User)
     end
 
     def unfollow(user)
       if user.valid_user?
-        result = ADN.delete("/stream/0/users/#{user.user_id}/follow")
+        result = ADN.delete("#{ADN::API_ENDPOINT_USERS}/#{user.user_id}/follow")
         ADN.create_instance(result["data"], User)
       end
     end
