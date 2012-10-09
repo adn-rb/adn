@@ -2,12 +2,12 @@
 
 module ADN
   class User
-    attr_accessor :user_id
-    attr_accessor :avatar_image, :counts, :cover_image,
-                  :created_at, :description, :follows_you,
-                  :id, :is_follower, :is_following, :is_muted,
-                  :locale, :name, :timezone, :type, :username,
-                  :you_follow, :you_muted
+    attr_accessor(
+      :user_id, :avatar_image, :counts, :cover_image,
+      :created_at, :description, :follows_you,
+      :id, :is_follower, :is_following, :is_muted,
+      :locale, :name, :timezone, :type, :username,
+      :you_follow, :you_muted) 
 
     def self.me
       new ADN::API::Token.current['user']
