@@ -15,27 +15,32 @@ module ADN
           raise ADN::API::Error, r['error'] if r.has_error?
         }
       end
+      
+      def construct_request(verb = 'get', url)
+        verb = verb.capitalize
+        Net::HTTP::verb.new(url)
+      end
 
       def get(url, params = nil)
         url = params.nil? ? url : [url, URI.encode_www_form(params)].join("?")
-        request = Net::HTTP::Get.new(url)
+        request = construct_request('get', url)
         perform(request)
       end
 
       def post(url, params = nil)
-        request = Net::HTTP::Post.new(url)
+        request = construct_request('post', url)
         request.set_form_data(params) if params
         perform(request)
       end
 
       def put(url, params = nil)
-        request = Net::HTTP::Put.new(url)
+        request = construct_request('put', url)
         request.set_form_data(params) if params
         perform(request)
       end
 
       def delete(url)
-        request = Net::HTTP::Delete.new(url)
+        request = construct_request('delete', url)
         perform(request)
       end
     end
