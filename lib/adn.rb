@@ -31,13 +31,9 @@ require 'date'
 
 module ADN
   Error = Class.new StandardError
-
-  def self.token=(token)
-    @token = token
-  end
-
-  def self.token
-    @token
+  
+  class << self
+    attr_accessor :token
   end
 
   def self.create_instance(data, type)
