@@ -16,31 +16,36 @@ module ADN
         }
       end
       
-      def construct_request(verb = 'get', url)
-        verb = verb.capitalize
-        Net::HTTP::verb.new(url)
+      def construct_request(verb, url)
+        http_method = case verb
+          when :post then Net::HTTP::Post
+          when :put then Net::HTTP::Put
+          when :delete then Net::HTTP::Delete
+          else Net::HTTP::Get
+        end
+        http_method.new(url)
       end
 
       def get(url, params = nil)
         url = params.nil? ? url : [url, URI.encode_www_form(params)].join("?")
-        request = construct_request('get', url)
+        request = construct_request(:get, url)
         perform(request)
       end
 
       def post(url, params = nil)
-        request = construct_request('post', url)
+        request = construct_request(:post, url)
         request.set_form_data(params) if params
         perform(request)
       end
 
       def put(url, params = nil)
-        request = construct_request('put', url)
+        request = construct_request(:put, url)
         request.set_form_data(params) if params
         perform(request)
       end
 
       def delete(url)
-        request = construct_request('delete', url)
+        request = construct_request(:delete, url)
         perform(request)
       end
     end
