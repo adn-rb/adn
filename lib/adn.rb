@@ -41,6 +41,6 @@ module ADN
   end
 
   def self.create_collection(data, type)
-    data.collect { |t| type.new(t) }
+    data.map { |t| type.new(t) }
   end
 end
