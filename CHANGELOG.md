@@ -1,7 +1,7 @@
 ### Changelog
 
 * **Version 0.3.1** (28 August 2012)  
-  * Fixed naming conflict
+  * Fixed naming conflict.
 * **Version 0.3** (28 August 2012)  
   * Now includes a Post class that describes each post along with a bunch of new methods of accessing a post's replies and the post's original post.  
   * Users methods that return user details (follow, unfollow, following, followers, mute, unmute, mute_list) will now return either a User object back, or an array of User objects.  
