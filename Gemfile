@@ -3,5 +3,5 @@ gemspec
 
 group :test do
   gem 'rake'
-  gem 'minitest', '~> 3.3'
+  gem 'minitest', '~> 4.1'
 end
