@@ -3,11 +3,13 @@
 module ADN
   class User
     attr_accessor(
-      :user_id, :avatar_image, :counts, :cover_image,
-      :created_at, :description, :follows_you,
-      :id, :is_follower, :is_following, :is_muted,
-      :locale, :name, :timezone, :type, :username,
-      :you_follow, :you_muted)
+      :id, :user_id, :username, :name, :description,
+      :timezone, :locale, :avatar_image,
+      :cover_image, :type, :counts, :app_data,
+      :follows_you, :you_follow, :you_muted
+    )
+      
+    attr_writer :created_at
 
     def self.me
       new ADN::API::Token.current["user"]
