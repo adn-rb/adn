@@ -1,5 +1,7 @@
 ### Changelog
 
+* **Version 0.3.5** (23 October 2012)
+ * Added the unified stream
 * **Version 0.3.1** (28 August 2012)  
   * Fixed naming conflict.
 * **Version 0.3** (28 August 2012)  
