@@ -90,6 +90,17 @@ describe ADN::API::Post do
     end
   end
 
+  describe "unified_stream" do
+    it "retrieves the unified stream" do
+      args(:get) {
+        path, params = subject.unified_stream('baz')
+
+        path.must_equal base_path + "/stream/unified"
+        params.must_equal 'baz'
+      }
+    end
+  end
+
   describe "by_hashtag" do
     it "retrieves posts by hashtag" do
       args(:get) {

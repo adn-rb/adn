@@ -39,6 +39,10 @@ module ADN
         ADN::API.get("#{ADN::API_ENDPOINT_POSTS}/stream/global", params)
       end
 
+      def self.unified_stream(params = nil)
+        ADN::API.get("#{ADN::API_ENDPOINT_POSTS}/stream/unified", params)
+      end
+
       def self.by_hashtag(hashtag, params = nil)
         ADN::API.get("#{ADN::API_ENDPOINT_POSTS}/tag/#{hashtag}", params)
       end
