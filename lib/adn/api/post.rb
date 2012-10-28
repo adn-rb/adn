@@ -32,19 +32,19 @@ module ADN
       end
 
       def self.stream(params = nil)
-        ADN::API.get("#{ADN::API_ENDPOINT_POSTS}/stream", params)
+        ADN::API.get("#{ADN::API_ENDPOINT_STREAM}", params)
       end
 
       def self.global_stream(params = nil)
-        ADN::API.get("#{ADN::API_ENDPOINT_POSTS}/stream/global", params)
+        ADN::API.get("#{ADN::API_ENDPOINT_STREAM_GLOBAL}", params)
       end
 
       def self.unified_stream(params = nil)
-        ADN::API.get("#{ADN::API_ENDPOINT_POSTS}/stream/unified", params)
+        ADN::API.get("#{ADN::API_ENDPOINT_STREAM_UNIFIED}", params)
       end
 
       def self.by_hashtag(hashtag, params = nil)
-        ADN::API.get("#{ADN::API_ENDPOINT_POSTS}/tag/#{hashtag}", params)
+        ADN::API.get("#{ADN::API_ENDPOINT_TAG}/#{hashtag}", params)
       end
     end
   end
