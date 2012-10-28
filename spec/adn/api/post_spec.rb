@@ -5,7 +5,7 @@ require_relative '../../spec_helper'
 describe ADN::API::Post do
   subject { ADN::API::Post }
 
-  let(:base_path) { '/stream/0/posts' }
+  let(:base_path) { ADN::API_ENDPOINT_POSTS }
 
   describe "new" do
     it "posts the passed in params to the API" do
@@ -84,7 +84,7 @@ describe ADN::API::Post do
       args(:get) {
         path, params = subject.global_stream('bar')
 
-        path.must_equal base_path + "/stream/global"
+        path.must_equal ADN::API_ENDPOINT_STREAM_GLOBAL
         params.must_equal 'bar'
       }
     end
@@ -95,7 +95,7 @@ describe ADN::API::Post do
       args(:get) {
         path, params = subject.unified_stream('baz')
 
-        path.must_equal base_path + "/stream/unified"
+        path.must_equal ADN::API_ENDPOINT_STREAM_UNIFIED
         params.must_equal 'baz'
       }
     end
@@ -106,7 +106,7 @@ describe ADN::API::Post do
       args(:get) {
         path, params = subject.by_hashtag('ruby', 'foo')
 
-        path.must_equal base_path + "/tag/ruby"
+        path.must_equal "#{ADN::API_ENDPOINT_TAG}/ruby"
         params.must_equal 'foo'
       }
     end
