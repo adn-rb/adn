@@ -6,12 +6,14 @@ PATH
 GEM
   remote: http://rubygems.org/
   specs:
+    ffi (1.2.0)
     kicker (3.0.0pre1)
       listen
     listen (0.6.0)
     minitest (4.1.0)
     rake (0.9.2.2)
-    rb-fsevent (0.9.2)
+    rb-inotify (0.8.8)
+      ffi (>= 0.5.0)
 
 PLATFORMS
   ruby
@@ -21,4 +23,4 @@ DEPENDENCIES
   kicker (>= 3.0.0pre1)
   minitest (~> 4.1)
   rake
-  rb-fsevent
+  rb-inotify
