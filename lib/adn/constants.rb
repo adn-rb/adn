@@ -10,5 +10,7 @@ module ADN
   API_ENDPOINT_TOKEN = "#{API_ENDPOINT}/token"
   HTTP = Net::HTTP.new(API_HOST, 443)
 
+  HTTP_ERROR = 400
+
   HTTP.use_ssl = true
 end

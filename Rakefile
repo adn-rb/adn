@@ -15,10 +15,3 @@ task :quality do
     exec 'cane'
   end
 end
-
-desc "Run tests in a loop using kicker (>= 3.0.0pre1)"
-task :kicker do
-  Bundler.with_clean_env do
-    exec 'kicker --no-notification -r ruby -e "clear && rake" spec lib'
-  end
-end

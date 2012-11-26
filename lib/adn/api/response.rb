@@ -6,7 +6,7 @@ module ADN
   module API
     class Response < SimpleDelegator
       def has_error?
-        has_key?("error")
+        self['meta'].nil? || self['meta']['code'].nil? || self['meta']['code'] >= HTTP_ERROR
       end
     end
   end
