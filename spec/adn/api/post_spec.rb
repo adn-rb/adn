@@ -6,6 +6,12 @@ describe ADN::API::Post do
   subject { ADN::API::Post }
 
   let(:base_path) { '/stream/0/posts' }
+  let(:error_message) {'Call requires authentication: This view requires authentication and no token was provided.'}
+  let(:error_response) { OpenStruct.new(:body => %Q{ { "meta" : {
+                            "code" : 401,
+                            "error_id" : "6f5137beac6c4b9ea8dbec8e50aa9f38$32a85f1c22e98de98ea2ddabaf76c5ae",
+                            "error_message" : "#{error_message}"
+                            }} }) }
 
   describe "new" do
     it "posts the passed in params to the API" do
@@ -16,6 +22,17 @@ describe ADN::API::Post do
         params.must_equal foo: 'bar'
       }
     end
+
+    it 'retrieves error message correctly' do
+      ADN::HTTP.stub(:request, error_response) do
+        error_call = lambda {subject.create({ foo: 'bar' })}
+        error_call.must_raise ADN::API::Error
+
+        error = error_call.call rescue $!
+        error.message.must_equal error_message
+      end
+    end
+
   end
 
   describe "retrieve" do

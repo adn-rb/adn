@@ -14,7 +14,7 @@ module ADN
         response = JSON.parse ADN::HTTP.request(request).body
 
         Response.new(response).tap { |r|
-          raise ADN::API::Error, r['error'] if r.has_error?
+          raise ADN::API::Error, r.error_message if r.has_error?
         }
       end
 
