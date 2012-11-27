@@ -10,7 +10,7 @@ module ADN
       end
 
       def error_message
-        self['meta']['error_message'] rescue nil
+        self.fetch('meta').fetch('error_message')
       end
     end
   end
