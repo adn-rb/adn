@@ -36,14 +36,14 @@ module ADN
 
       def post(url, params = nil)
         request = construct_request(:post, url)
-        request.add_field('Conent-Type', 'application/json')
+        request.add_field('Content-Type', 'application/json')
         request.body = params.to_json if params
         perform(request)
       end
 
       def put(url, params = nil)
         request = construct_request(:put, url)
-        request.add_field('Conent-Type', 'application/json')
+        request.add_field('Content-Type', 'application/json')
         request.body = params.to_json if params
         perform(request)
       end
