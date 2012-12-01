@@ -17,6 +17,11 @@ module ADN
       Post.new(result["data"])
     end
 
+    def self.by_id(id)
+      result = ADN::API::Post.by_id(id)
+      Post.new(result["data"])
+    end
+
     def initialize(raw_post)
       if raw_post.respond_to?(:each_pair)
         set_values(raw_post)
