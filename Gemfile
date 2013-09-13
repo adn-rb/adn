@@ -1,7 +1,8 @@
-source :rubygems
+source "https://rubygems.org"
+
 gemspec
 
 group :test do
   gem 'rake'
-  gem 'minitest', '~> 4.3'
+  gem 'minitest', '~> 5.0'
 end

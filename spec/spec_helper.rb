@@ -1,7 +1,7 @@
 # encoding: UTF-8
 
-require 'minitest/spec'
 require 'minitest/autorun'
+require 'minitest/spec'
 
 begin
   require 'minitest/pride'
