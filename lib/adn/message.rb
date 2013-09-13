@@ -12,21 +12,22 @@ module ADN
     attr_writer :user, :created_at
 
     def self.send_message(params)
-      result = ADN::API::Message.create(params)
+      channel_id = params.delete('channel_id')
+      result = ADN::API::Message.create(channel_id, params)
       Message.new(result["data"])
     end
 
-    def self.by_id(id)
-      result = ADN::API::Message.by_id(id)
+    def self.by_id(channel_id, id)
+      result = ADN::API::Message.by_id(channel_id, id)
       Message.new(result["data"])
     end
 
     def initialize(raw_message)
-      if raw_message.respond_to?(:each_pair)
-        set_values(raw_message)
-        message_id = id
-      else
-        message_id = raw_message
+      set_values(raw_message)
+      message_id = id
+
+      if raw_message.length == 2 and raw_message.key? :id and raw_message.key? :channel_id
+        # If we only have the bare minimum data, assume we want to get values from the server
         message_details = details
         if message_details.has_key? "data"
           set_values(message_details["data"])
@@ -35,13 +36,14 @@ module ADN
     end
 
     def details
-      if id
+      # if we have a source, then we've loaded stuff from the server
+      if source
         value = self.instance_variables.map do |i|
           [i.to_s.slice(1..-1), self.instance_variable_get(i)]
         end
         Hash[value]
       else
-        ADN::API::Message.by_id(post_id)
+        ADN::API::Message.by_id(channel_id, message_id)
       end
     end
 
@@ -53,13 +55,8 @@ module ADN
       ADN::User.new(@user)
     end
 
-    def reply_to_message
-      result = ADN::API::Message.by_id(reply_to)
-      ADN.create_instance(result["data"], Message)
-    end
-
     def delete
-      result = ADN::API::Message.delete(id)
+      result = ADN::API::Message.delete(channel_id, id)
       ADN.create_instance(result["data"], Message)
     end
 
