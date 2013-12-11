@@ -3,9 +3,9 @@
 module ADN
   module Recipes
     def self.send_broadcast(params)
-      channel_id = params.delete('channel_id')
-      broadcast = params.delete('broadcast')
-      text = params.delete('text')
+      channel_id     = params.delete('channel_id')
+      broadcast      = params.delete('broadcast')
+      text           = params.delete('text')
       read_more_link = params.delete('read_more_link')
 
       message = {
@@ -30,8 +30,11 @@ module ADN
         }
       end
 
-      result = ADN::API::Message.create(channel_id, message)
-      Message.new(result["data"])
+      build_message(channel_id, message)
+    end
+
+    def self.build_message(channel_id, message)
+      Message.new ADN::API::Message.create(channel_id, message)["data"]
     end
   end
 end
