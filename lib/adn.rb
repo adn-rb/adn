@@ -27,7 +27,7 @@ require 'uri'
 require 'json'
 require 'date'
 
-%w{constants api post user version message}.each { |f| require_relative "adn/#{f}" }
+%w{constants api message post user version recipes}.each { |f| require_relative "adn/#{f}" }
 
 module ADN
   Error = Class.new StandardError
