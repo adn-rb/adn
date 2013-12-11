@@ -6,12 +6,17 @@ describe ADN::API::Message do
   subject { ADN::API::Message }
 
   let(:base_path) { '/stream/0/channels' }
-  let(:error_message) {'Call requires authentication: This view requires authentication and no token was provided.'}
-  let(:error_response) { OpenStruct.new(:body => %Q{ { "meta" : {
+  let(:error_message) {
+    'Call requires authentication: This view requires authentication and no token was provided.'
+  }
+
+  let(:error_response) {
+    OpenStruct.new(:body => %Q{ { "meta" : {
                             "code" : 401,
                             "error_id" : "6f5137beac6c4b9ea8dbec8e50aa9f38$32a85f1c22e98de98ea2ddabaf76c5ae",
                             "error_message" : "#{error_message}"
-                            }} }) }
+                            }} })
+  }
 
   describe "new" do
     it "messages the passed in params to the API" do
@@ -32,7 +37,6 @@ describe ADN::API::Message do
         error.message.must_equal error_message
       end
     end
-
   end
 
   describe "retrieve" do

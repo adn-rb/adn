@@ -1,11 +1,11 @@
 ADN
 ===
 
-[![Build Status](https://secure.travis-ci.org/kishyr/ADNRuby.png)](http://travis-ci.org/kishyr/ADNRuby)
+[![Build Status](https://api.travis-ci.org/adn-rb/adn.png)](https://travis-ci.org/adn-rb/adn)
 
-A Ruby library for App.net by [@kishyr](https://alpha.app.net/kishyr). 
+A Ruby library for App.net by [@kishyr](https://alpha.app.net/kishyr).
 
-This library follows the current [App.net API Spec](https://github.com/appdotnet/api-spec) (as at 26 August 2012).  
+This library follows the current [App.net API Spec](https://github.com/appdotnet/api-spec) (as at 26 August 2012).
 
 ### Contributors
 
@@ -26,7 +26,7 @@ Or you can install ADN directly from rubygems.org:
 `gem install adn`
 
 ### Usage
-For API calls that accept parameters described in the App.net API Spec, simply pass them as a dictionary to the method.  
+For API calls that accept parameters described in the App.net API Spec, simply pass them as a dictionary to the method.
 
 ```ruby
   require 'adn'
@@ -41,7 +41,7 @@ Complete documentation will be available soon, but in the meantime you can brows
 
 ### License
 
-**ADN** is licensed under the MIT License and is Copyright (c) 2012 Kishyr Ramdial.  
+**ADN** is licensed under the MIT License and is Copyright (c) 2013 Kishyr Ramdial.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

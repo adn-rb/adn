@@ -9,7 +9,7 @@ module ADN
       :annotations, :entities, :you_reposted,
       :you_starred, :reposters, :starred_by
     )
-      
+
     attr_writer :user, :created_at
 
     def self.send_post(params)

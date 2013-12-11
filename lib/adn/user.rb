@@ -8,7 +8,7 @@ module ADN
       :cover_image, :type, :counts, :app_data,
       :follows_you, :you_follow, :you_muted
     )
-      
+
     attr_writer :created_at
 
     def self.me
