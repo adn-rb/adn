@@ -2,100 +2,64 @@
 
 require_relative '../spec_helper'
 
-class Example
-  extend ADN::Recipes
-end
+describe ADN::Recipes::BroadcastMessageBuilder do
+  subject { ADN::Recipes::BroadcastMessageBuilder.new }
 
-describe ADN::Recipes do
-  subject { ADN::Recipes }
-
-  describe "send_broadcast" do
-    describe "with params including a read more link" do
-      let(:params) do
-        {
-          'channel_id'     => 123,
-          'broadcast'      => 'foo',
-          'text'           => 'bar',
-          'read_more_link' => 'baz'
-        }
-      end
-
-      it "generates a broadcast message" do
-        subject.stub(:build_message, ->(*args) { args }) do
-          channel_id, message = subject.send_broadcast(params)
-
-          channel_id.must_equal 123
-
-          message.must_equal({
-            annotations: [
-              {
-                type: "net.app.core.broadcast.message.metadata",
-                value: { subject: "foo" }
-              },
-              {
-                type: "net.app.core.crosspost",
-                value: { canonical_url: "baz" }
-              }
-            ],
-            text: "bar",
-            machine_only: false
-          })
-        end
+  describe "annotations" do
+    describe "with a read more link" do
+      it "generates a crosspost annotation" do
+        subject.headline = "foo"
+        subject.read_more_link = "http://app.net"
+        subject.annotations.must_equal([
+          {
+            type: "net.app.core.broadcast.message.metadata",
+            value: { subject: "foo" }
+          },
+          {
+            type: "net.app.core.crosspost",
+            value: { canonical_url: "http://app.net" }
+          }
+        ])
       end
     end
 
-    describe "with params without a read more link" do
-      let(:params) do
-        {
-          'channel_id' => 456,
-          'broadcast'  => 'qux',
-          'text'       => 'quux'
-        }
+    describe "with only a headline" do
+      it "generates a message metadata annotation" do
+        subject.headline = "foo"
+        subject.annotations.must_equal([
+          {
+            type: "net.app.core.broadcast.message.metadata",
+            value: { subject: "foo" }
+          },
+        ])
       end
+    end
+  end
 
-      it "generates a broadcast message" do
-        subject.stub(:build_message, ->(*args) { args }) do
-          channel_id, message = subject.send_broadcast(params)
-
-          channel_id.must_equal 456
-
-          message.must_equal({
-            annotations: [
-              {
-                type: "net.app.core.broadcast.message.metadata",
-                value: { subject: "qux" }
-              }
-            ],
-            text: "quux",
-            machine_only: false
-          })
-        end
+  describe "message" do
+    describe "with text" do
+      it "includes the extra text" do
+        subject.headline = "foo"
+        subject.text = "bar"
+        subject.message[:text].must_equal("bar")
+        subject.message[:machine_only].must_equal(false)
       end
     end
 
-    describe "with params without text" do
-      let(:params) do
-        {
-          'channel_id' => 789,
-          'broadcast'  => 'corge'
-        }
+    describe "without text" do
+      it "generates a machine only message" do
+        subject.headline = "foo"
+        subject.message[:text].must_be_nil
+        subject.message[:machine_only].must_equal(true)
       end
-
-      it "generates a broadcast message" do
-        subject.stub(:build_message, ->(*args) { args }) do
-          channel_id, message = subject.send_broadcast(params)
-
-          message.must_equal({
-            annotations: [
-              {
-                type: "net.app.core.broadcast.message.metadata",
-                value: { subject: "corge" }
-              }
-            ],
-            text: nil,
-            machine_only: true
-          })
-        end
+      it "includes the annotations" do
+        subject.headline = "bar"
+        subject.message[:annotations].must_equal([
+          {
+            type: "net.app.core.broadcast.message.metadata",
+            value: { subject: "bar" }
+          },
+        ])
       end
     end
   end
