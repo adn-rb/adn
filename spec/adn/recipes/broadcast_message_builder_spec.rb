@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-require_relative '../spec_helper'
+require_relative '../../spec_helper'
 
 describe ADN::Recipes::BroadcastMessageBuilder do
   subject { ADN::Recipes::BroadcastMessageBuilder.new }
@@ -60,6 +60,37 @@ describe ADN::Recipes::BroadcastMessageBuilder do
             value: { subject: "bar" }
           },
         ])
+      end
+    end
+  end
+
+  describe "send" do
+    it "calls the api with the message" do
+      headline = "foo"
+      channel_id = "123"
+      response_body = %Q{{
+        "meta": {
+          "code": 200
+        },
+        "data": {
+          "annotations": [
+            {
+              "type": "net.app.core.broadcast.message.metadata",
+              "value": {"subject": "#{headline}"}
+            }
+          ],
+          "channel_id": "#{channel_id}"
+        }
+      }}
+      response = OpenStruct.new(:body => response_body)
+
+      ADN::HTTP.stub(:request, response) do
+        subject.headline = headline
+        subject.channel_id = channel_id
+
+        message = subject.send
+        message.channel_id.must_equal channel_id
+        message.annotations[0]["value"]["subject"].must_equal headline
       end
     end
   end
