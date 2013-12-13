@@ -62,6 +62,24 @@ describe ADN::Recipes::BroadcastMessageBuilder do
         ])
       end
     end
+
+    it "allows you to parse links" do
+      subject.headline = "foo"
+      subject.parse_links = true
+      subject.message[:entities].must_equal({
+        parse_links: true,
+        parse_markdown_links: false
+      })
+    end
+
+    it "parses links when you ask for parsing markdown links" do
+      subject.headline = "foo"
+      subject.parse_markdown_links = true
+      subject.message[:entities].must_equal({
+        parse_links: true,
+        parse_markdown_links: true
+      })
+    end
   end
 
   describe "send" do

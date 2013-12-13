@@ -4,7 +4,7 @@ module ADN
   module Recipes
     class BroadcastMessageBuilder
       attr_accessor(
-        :headline, :text, :read_more_link, :channel_id
+        :headline, :text, :read_more_link, :channel_id, :parse_links, :parse_markdown_links, :photo, :attachment
       )
 
       def initialize(params = {})
@@ -40,7 +40,11 @@ module ADN
         {
           annotations: self.annotations,
           text: self.text,
-          machine_only: (not self.text)
+          machine_only: (not self.text),
+          entities: {
+            parse_links: (self.parse_links or self.parse_markdown_links),
+            parse_markdown_links: !!self.parse_markdown_links
+          }
         }
       end
 
