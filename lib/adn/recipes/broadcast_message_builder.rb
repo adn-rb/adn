@@ -7,6 +7,13 @@ module ADN
         :headline, :text, :read_more_link, :channel_id
       )
 
+      def initialize(params = {})
+        if params.respond_to? :each_pair
+          params.each_pair { |k, v| send("#{k}=", v) if respond_to?("#{k}=") }
+        end
+        yield self if block_given?
+      end
+
       def annotations
         annotations = [
           {
