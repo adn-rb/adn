@@ -13,5 +13,7 @@ Gem::Specification.new do |s|
   s.files       = `git ls-files`.split($\)
   s.test_files  = s.files.grep(%r{^(spec)/})
 
+  s.add_runtime_dependency "multipart-post", ["~> 1.2.0"]
+  s.add_runtime_dependency "mime-types", ["~> 2.0"]
   s.required_ruby_version = '>= 1.9.3'
 end
