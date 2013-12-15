@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-%w{response filter post stream subscription token user message}.each do |f|
+%w{response filter post stream subscription token user message file}.each do |f|
   require_relative "api/#{f}"
 end
 
@@ -38,6 +38,11 @@ module ADN
         request = construct_request(:post, url)
         request.add_field('Content-Type', 'application/json')
         request.body = params.to_json if params
+        perform(request)
+      end
+
+      def post_multipart(url, *http_args)
+        request = Net::HTTP::Post::Multipart.new(url, *http_args)
         perform(request)
       end
 
