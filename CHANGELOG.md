@@ -1,6 +1,9 @@
 ### Changelog
 
-* **Version 0.3.5** (11 December 2013)
+* **Version 0.3.7** (15 December 2013)
+  * Recipes now use the builder pattern
+  * Basic file functionality
+* **Version 0.3.6** (11 December 2013)
   * Added recipe for easy broadcast creation
 * **Version 0.3.5** (23 October 2012)
   * Added the unified stream
