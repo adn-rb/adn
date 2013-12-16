@@ -33,19 +33,55 @@ module ADN
           }
         end
 
+        if self.photo
+          file = ADN::File.upload_file(self.photo, {type: 'net.app.adnrb.upload'})
+          annotations << {
+            type: 'net.app.core.oembed',
+            value: {
+              "+net.app.core.file" => {
+                file_id: file.id,
+                file_token: file.file_token,
+                format: 'oembed',
+              }
+            }
+          }
+        end
+
+        if self.attachment
+          file = ADN::File.upload_file(self.attachment, {type: 'net.app.adnrb.upload'})
+          annotations << {
+            type: 'net.app.core.attachments',
+            value: {
+              "+net.app.core.file_list" => [
+                {
+                  file_id: file.id,
+                  file_token: file.file_token,
+                  format: 'metadata',
+                }
+              ]
+            }
+          }
+        end
+
         annotations
       end
 
       def message
-        {
+        message = {
           annotations: self.annotations,
-          text: self.text,
-          machine_only: (not self.text),
           entities: {
-            parse_links: (self.parse_links or self.parse_markdown_links),
+            parse_links: !!(self.parse_links or self.parse_markdown_links),
             parse_markdown_links: !!self.parse_markdown_links
           }
         }
+
+        if self.text
+          message[:text] = self.text
+        else
+          message[:machine_only] = true
+        end
+
+        message
       end
 
       def send
