@@ -27,7 +27,7 @@ require 'uri'
 require 'json'
 require 'date'
 
-%w{constants api message post user version recipes}.each do |f|
+%w{constants api file message post user version recipes}.each do |f|
   require_relative "adn/#{f}"
 end
 

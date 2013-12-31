@@ -34,6 +34,44 @@ describe ADN::Recipes::BroadcastMessageBuilder do
         ])
       end
     end
+
+    describe "with a photo" do
+      it "generates an oembed annotation" do
+        ADN::API::File.stub(:create, ADN::API::Response.new({"data" => {id: "1", file_token: "1234"}})) do
+          subject.headline = "foo"
+          subject.photo = "foo.jpg"
+          subject.annotations.must_equal([
+            {
+              type: "net.app.core.broadcast.message.metadata",
+              value: { subject: "foo" }
+            },
+            {
+              type: "net.app.core.oembed",
+              value: { "+net.app.core.file" => {file_id: "1", file_token: "1234", format: "oembed"}}
+            }
+          ])
+        end
+      end
+    end
+
+    describe "with an attachment" do
+      it "generates an attachment annotation" do
+        ADN::API::File.stub(:create, ADN::API::Response.new({"data" => {id: "1", file_token: "1234"}})) do
+          subject.headline = "foo"
+          subject.attachment = "foo.txt"
+          subject.annotations.must_equal([
+            {
+              type: "net.app.core.broadcast.message.metadata",
+              value: { subject: "foo" }
+            },
+            {
+              type: "net.app.core.attachments",
+              value: { "+net.app.core.file_list" => [{file_id: "1", file_token: "1234", format: "metadata"}]}
+            }
+          ])
+        end
+      end
+    end
   end
 
   describe "message" do
@@ -42,7 +80,7 @@ describe ADN::Recipes::BroadcastMessageBuilder do
         subject.headline = "foo"
         subject.text = "bar"
         subject.message[:text].must_equal("bar")
-        subject.message[:machine_only].must_equal(false)
+        subject.message[:machine_only].must_equal(nil)
       end
     end
 
