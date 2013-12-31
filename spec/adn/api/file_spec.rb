@@ -6,17 +6,25 @@ describe ADN::API::File do
   subject { ADN::API::File }
 
   let(:base_path) { '/stream/0/files' }
-  let(:error_message) {
-    'Call requires authentication: This view requires authentication and no token was provided.'
-  }
 
-  let(:error_response) {
-    OpenStruct.new(:body => %Q{ { "meta" : {
-                            "code" : 401,
-                            "error_id" : "6f5137beac6c4b9ea8dbec8e50aa9f38$32a85f1c22e98de98ea2ddabaf76c5ae",
-                            "error_message" : "#{error_message}"
-                            }} })
-  }
+  let(:error_id) do
+    '6f5137beac6c4b9ea8dbec8e50aa9f38$32a85f1c22e98de98ea2ddabaf76c5ae'
+  end
+
+  let(:error_message) do
+    'Call requires authentication: This view requires' +
+    ' authentication and no token was provided.'
+  end
+
+  let(:error_response) do
+    OpenStruct.new(:body => %Q{ {
+      "meta" : {
+        "code" : 401,
+        "error_id" : "#{error_id}",
+        "error_message" : "#{error_message}"
+      }}
+    })
+  end
 
   describe "new" do
     it "passes the file content in params to the API" do
@@ -27,6 +35,7 @@ describe ADN::API::File do
         params["content"].local_path.must_equal __FILE__
         params["content"].content_type.must_equal "application/x-ruby"
         params["metadata"].content_type.must_equal "application/json"
+
         JSON.parse(params["metadata"].read).must_equal({"type" => 'foo'})
       }
     end

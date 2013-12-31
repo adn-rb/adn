@@ -6,16 +6,24 @@ describe ADN::API::Message do
   subject { ADN::API::Message }
 
   let(:base_path) { '/stream/0/channels' }
-  let(:error_message) {
-    'Call requires authentication: This view requires authentication and no token was provided.'
-  }
+
+  let(:error_id) do
+    '6f5137beac6c4b9ea8dbec8e50aa9f38$32a85f1c22e98de98ea2ddabaf76c5ae'
+  end
+
+  let(:error_message) do
+    'Call requires authentication: This view requires' +
+    ' authentication and no token was provided.'
+  end
 
   let(:error_response) {
-    OpenStruct.new(:body => %Q{ { "meta" : {
-                            "code" : 401,
-                            "error_id" : "6f5137beac6c4b9ea8dbec8e50aa9f38$32a85f1c22e98de98ea2ddabaf76c5ae",
-                            "error_message" : "#{error_message}"
-                            }} })
+    OpenStruct.new(:body =>
+      %Q{ { "meta" : {
+            "code" : 401,
+            "error_id" : "#{error_id}",
+            "error_message" : "#{error_message}"
+      }}
+    })
   }
 
   describe "new" do
@@ -41,7 +49,9 @@ describe ADN::API::Message do
 
   describe "retrieve" do
     it "retrieves the message" do
-      arg(:get) { subject.retrieve(8, 22).must_equal base_path + "/8/messages/22" }
+      arg(:get) {
+        subject.retrieve(8, 22).must_equal base_path + "/8/messages/22"
+      }
     end
   end
 
@@ -55,7 +65,9 @@ describe ADN::API::Message do
 
   describe "delete" do
     it "deletes the message" do
-      arg(:delete) { subject.delete(5, 77).must_equal base_path + "/5/messages/77" }
+      arg(:delete) {
+        subject.delete(5, 77).must_equal base_path + "/5/messages/77"
+      }
     end
   end
 end

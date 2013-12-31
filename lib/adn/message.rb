@@ -26,9 +26,14 @@ module ADN
       set_values(raw_message)
       message_id = id
 
-      if raw_message.length == 2 and raw_message.key? :id and raw_message.key? :channel_id
-        # If we only have the bare minimum data, assume we want to get values from the server
+      if raw_message.length == 2 and
+        raw_message.key? :id     and
+        raw_message.key? :channel_id
+
+        # If we only have the bare minimum data,
+        # assume we want to get values from the server
         message_details = details
+
         if message_details.has_key? "data"
           set_values(message_details["data"])
         end
@@ -36,11 +41,13 @@ module ADN
     end
 
     def details
-      # if we have a source, then we've loaded stuff from the server
+      # if we have a source, then we've loaded
+      # stuff from the server
       if source
         value = self.instance_variables.map do |i|
           [i.to_s.slice(1..-1), self.instance_variable_get(i)]
         end
+
         Hash[value]
       else
         ADN::API::Message.by_id(channel_id, message_id)
@@ -61,7 +68,9 @@ module ADN
     end
 
     def set_values(values)
-      values.each_pair { |k, v| send("#{k}=", v) if respond_to?("#{k}=") }
+      values.each_pair do |k, v|
+        send("#{k}=", v) if respond_to?("#{k}=")
+      end
     end
   end
 end

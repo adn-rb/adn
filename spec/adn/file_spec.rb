@@ -57,8 +57,22 @@ describe ADN::File do
   describe "details" do
     it "returns the details for the file" do
       file.details.keys.must_equal [
-        "created_at", "id", "user", "file_token", "sha1", "name", "source", "url", "kind", "total_size",
-        "url_expires", "size", "type", "public", "mime_type", "complete"
+        "created_at",
+        "id",
+        "user",
+        "file_token",
+        "sha1",
+        "name",
+        "source",
+        "url",
+        "kind",
+        "total_size",
+        "url_expires",
+        "size",
+        "type",
+        "public",
+        "mime_type",
+        "complete"
       ]
     end
   end

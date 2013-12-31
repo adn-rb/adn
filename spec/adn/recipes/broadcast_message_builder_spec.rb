@@ -37,7 +37,14 @@ describe ADN::Recipes::BroadcastMessageBuilder do
 
     describe "with a photo" do
       it "generates an oembed annotation" do
-        ADN::API::File.stub(:create, ADN::API::Response.new({"data" => {id: "1", file_token: "1234"}})) do
+        api_response = ADN::API::Response.new({
+          "data" => {
+            id: "1",
+            file_token: "1234"
+          }
+        })
+
+        ADN::API::File.stub(:create, api_response) do
           subject.headline = "foo"
           subject.photo = "foo.jpg"
           subject.annotations.must_equal([
@@ -47,7 +54,11 @@ describe ADN::Recipes::BroadcastMessageBuilder do
             },
             {
               type: "net.app.core.oembed",
-              value: { "+net.app.core.file" => {file_id: "1", file_token: "1234", format: "oembed"}}
+              value: { "+net.app.core.file" => {
+                file_id: "1",
+                file_token: "1234",
+                format: "oembed"
+              }}
             }
           ])
         end
@@ -56,7 +67,14 @@ describe ADN::Recipes::BroadcastMessageBuilder do
 
     describe "with an attachment" do
       it "generates an attachment annotation" do
-        ADN::API::File.stub(:create, ADN::API::Response.new({"data" => {id: "1", file_token: "1234"}})) do
+        api_response = ADN::API::Response.new({
+          "data" => {
+            id: "1",
+            file_token: "1234"
+          }
+        })
+
+        ADN::API::File.stub(:create, api_response) do
           subject.headline = "foo"
           subject.attachment = "foo.txt"
           subject.annotations.must_equal([
@@ -66,7 +84,13 @@ describe ADN::Recipes::BroadcastMessageBuilder do
             },
             {
               type: "net.app.core.attachments",
-              value: { "+net.app.core.file_list" => [{file_id: "1", file_token: "1234", format: "metadata"}]}
+              value: { "+net.app.core.file_list" => [
+                {
+                  file_id: "1",
+                  file_token: "1234",
+                  format: "metadata"
+                }
+              ]}
             }
           ])
         end
@@ -90,6 +114,7 @@ describe ADN::Recipes::BroadcastMessageBuilder do
         subject.message[:text].must_be_nil
         subject.message[:machine_only].must_equal(true)
       end
+
       it "includes the annotations" do
         subject.headline = "bar"
         subject.message[:annotations].must_equal([
@@ -138,6 +163,7 @@ describe ADN::Recipes::BroadcastMessageBuilder do
           "channel_id": "#{channel_id}"
         }
       }}
+
       response = OpenStruct.new(:body => response_body)
 
       ADN::HTTP.stub(:request, response) do

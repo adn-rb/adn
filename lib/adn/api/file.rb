@@ -6,11 +6,17 @@ module ADN
   module API
     module File
       def self.create(filename, params)
+        string_io = StringIO.new(params.to_json)
+
+        content   = UploadIO.new(filename, MIME::Types.type_for(filename)[0])
+        metadata  = UploadIO.new(string_io, "application/json", "data")
+
         http_params = {
-          "content" => UploadIO.new(filename, MIME::Types.type_for(filename)[0]),
+          "content" => content,
           # make a fake file so we can still pass json
-          "metadata" => UploadIO.new(StringIO.new(params.to_json), "application/json", "data"),
+          "metadata" => metadata
         }
+
         ADN::API.post_multipart("#{ADN::API_ENDPOINT_FILES}", http_params)
       end
 

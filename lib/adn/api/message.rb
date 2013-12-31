@@ -4,11 +4,15 @@ module ADN
   module API
     module Message
       def self.create(channel_id, params)
-        ADN::API.post("#{ADN::API_ENDPOINT_CHANNELS}/#{channel_id}/messages", params)
+        path = "/#{channel_id}/messages"
+
+        ADN::API.post(ADN::API_ENDPOINT_CHANNELS + path, params)
       end
 
       def self.retrieve(channel_id, message_id)
-        ADN::API.get("#{ADN::API_ENDPOINT_CHANNELS}/#{channel_id}/messages/#{message_id}")
+        path = "/#{channel_id}/messages/#{message_id}"
+
+        ADN::API.get(ADN::API_ENDPOINT_CHANNELS + path)
       end
 
       def self.by_id(channel_id, message_id)
@@ -16,7 +20,9 @@ module ADN
       end
 
       def self.delete(channel_id, message_id)
-        ADN::API.delete("#{ADN::API_ENDPOINT_CHANNELS}/#{channel_id}/messages/#{message_id}")
+        path = "/#{channel_id}/messages/#{message_id}"
+
+        ADN::API.delete(ADN::API_ENDPOINT_CHANNELS + path)
       end
     end
   end

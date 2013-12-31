@@ -3,14 +3,16 @@
 module ADN
   module Recipes
     class BroadcastMessageBuilder
-      attr_accessor(
-        :headline, :text, :read_more_link, :channel_id, :parse_links, :parse_markdown_links, :photo, :attachment
-      )
+      attr_accessor :headline, :text, :read_more_link, :channel_id,
+                    :parse_links, :parse_markdown_links, :photo, :attachment
 
       def initialize(params = {})
         if params.respond_to? :each_pair
-          params.each_pair { |k, v| send("#{k}=", v) if respond_to?("#{k}=") }
+          params.each_pair do |k, v|
+            send("#{k}=", v) if respond_to?("#{k}=")
+          end
         end
+
         yield self if block_given?
       end
 
@@ -34,7 +36,11 @@ module ADN
         end
 
         if self.photo
-          file = ADN::File.upload_file(self.photo, {type: 'net.app.adnrb.upload'})
+          file = ADN::File.upload_file(self.photo, {
+            type: 'net.app.adnrb.upload'
+          })
+
+
           annotations << {
             type: 'net.app.core.oembed',
             value: {
@@ -48,7 +54,10 @@ module ADN
         end
 
         if self.attachment
-          file = ADN::File.upload_file(self.attachment, {type: 'net.app.adnrb.upload'})
+          file = ADN::File.upload_file(self.attachment, {
+            type: 'net.app.adnrb.upload'
+          })
+
           annotations << {
             type: 'net.app.core.attachments',
             value: {
@@ -85,7 +94,9 @@ module ADN
       end
 
       def send
-        Message.new ADN::API::Message.create(self.channel_id, self.message)["data"]
+        api_message = ADN::API::Message.create(self.channel_id, self.message)
+
+        Message.new api_message["data"]
       end
     end
   end

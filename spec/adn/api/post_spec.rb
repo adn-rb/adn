@@ -6,12 +6,25 @@ describe ADN::API::Post do
   subject { ADN::API::Post }
 
   let(:base_path) { '/stream/0/posts' }
-  let(:error_message) {'Call requires authentication: This view requires authentication and no token was provided.'}
-  let(:error_response) { OpenStruct.new(:body => %Q{ { "meta" : {
-                            "code" : 401,
-                            "error_id" : "6f5137beac6c4b9ea8dbec8e50aa9f38$32a85f1c22e98de98ea2ddabaf76c5ae",
-                            "error_message" : "#{error_message}"
-                            }} }) }
+
+  let(:error_message) do
+    'Call requires authentication: This view requires' +
+    ' authentication and no token was provided.'
+  end
+
+  let(:error_id) do
+    "6f5137beac6c4b9ea8dbec8e50aa9f38$32a85f1c22e98de98ea2ddabaf76c5ae"
+  end
+
+  let(:error_response) do
+    OpenStruct.new(:body => %Q{ {
+      "meta" : {
+        "code" : 401,
+        "error_id" : "#{error_id}",
+        "error_message" : "#{error_message}"
+      }}
+    })
+  end
 
   describe "new" do
     it "posts the passed in params to the API" do
@@ -32,12 +45,13 @@ describe ADN::API::Post do
         error.message.must_equal error_message
       end
     end
-
   end
 
   describe "retrieve" do
     it "retrieves the post" do
-      arg(:get) { subject.retrieve(22).must_equal base_path + "/22" }
+      arg(:get) {
+        subject.retrieve(22).must_equal base_path + "/22"
+      }
     end
   end
 
@@ -51,7 +65,9 @@ describe ADN::API::Post do
 
   describe "delete" do
     it "deletes the post" do
-      arg(:delete) { subject.delete(77).must_equal base_path + "/77" }
+      arg(:delete) {
+        subject.delete(77).must_equal base_path + "/77"
+      }
     end
   end
 
