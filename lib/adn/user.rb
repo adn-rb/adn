@@ -30,13 +30,13 @@ module ADN
     # Followers/Users
 
     def follow(user)
-      result = ADN.post("#{ADN::API_ENDPOINT_USERS}/#{user.user_id}/follow")
+      result = ADN::API.post("#{ADN::API_ENDPOINT_USERS}/#{user.user_id}/follow")
       ADN.create_instance(result["data"], User)
     end
 
     def unfollow(user)
       if user.valid_user?
-        result = ADN.delete("#{ADN::API_ENDPOINT_USERS}/#{user.user_id}/follow")
+        result = ADN::API.delete("#{ADN::API_ENDPOINT_USERS}/#{user.user_id}/follow")
         ADN.create_instance(result["data"], User)
       end
     end
@@ -55,14 +55,14 @@ module ADN
 
     def mute(user)
       if user.valid_user?
-        result = ADN.post("#{ADN::API_ENDPOINT_USERS}/#{user.user_id}/mute")
+        result = ADN::API.post("#{ADN::API_ENDPOINT_USERS}/#{user.user_id}/mute")
         ADN.create_instance(result["data"], User)
       end
     end
 
     def unmute(user)
       if user.valid_user?
-        result = ADN.delete("#{ADN::API_ENDPOINT_USERS}/#{user.user_id}/mute")
+        result = ADN::API.delete("#{ADN::API_ENDPOINT_USERS}/#{user.user_id}/mute")
         ADN.create_instance(result["data"], User)
       end
     end
