@@ -3,7 +3,7 @@
 require 'net/https'
 
 module ADN
-  API_HOST = "alpha-api.app.net"
+  API_HOST = "api.app.net"
   API_ENDPOINT = "/stream/0"
   API_ENDPOINT_POSTS = "#{API_ENDPOINT}/posts"
   API_ENDPOINT_USERS = "#{API_ENDPOINT}/users"
