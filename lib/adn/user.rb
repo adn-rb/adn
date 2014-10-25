@@ -16,7 +16,7 @@ module ADN
     end
 
     def self.find(user_id)
-      new ADN::API::User.retrieve(user_id)
+      new ADN::API::User.retrieve(user_id)['data']
     end
 
     def initialize(user_data = {})
