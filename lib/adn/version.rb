@@ -3,7 +3,7 @@
 module ADN
   MAJOR = 0
   MINOR = 3
-  TINY  = 8
+  TINY  = 9
   VERSION = [MAJOR, MINOR, TINY].join('.')
 end
 
