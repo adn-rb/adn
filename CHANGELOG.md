@@ -1,5 +1,7 @@
 ### Changelog
 
+* **Version 0.3.10** (25 October 2014)
+  * Bugfix: Construct user object using data property
 * **Version 0.3.9** (25 October 2014)
   * Bugfix: Use of ADN.post/delete changed to ADN::API.post/delete
 * **Version 0.3.8** (31 December 2013)
