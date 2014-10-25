@@ -1,3 +1,5 @@
+## NOTE: This project is not under active development.
+
 ADN
 ===
 
