@@ -1,14 +1,14 @@
 PATH
   remote: .
   specs:
-    adn (0.3.8)
+    adn (0.3.10)
       mime-types (~> 2.0)
       multipart-post (~> 1.2.0)
 
 GEM
   remote: https://rubygems.org/
   specs:
-    mime-types (2.0)
+    mime-types (2.4.3)
     minitest (5.1.0)
     multipart-post (1.2.0)
     rake (10.1.0)
