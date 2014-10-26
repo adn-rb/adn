@@ -16,7 +16,7 @@ describe ADN do
   end
 
   it "has a constant containing the hostname of the api" do
-    ADN::API_HOST.must_equal 'alpha-api.app.net'
+    ADN::API_HOST.must_equal 'api.app.net'
   end
 
   it "has constants for the API endpoints posts, users, channels, and files" do
@@ -34,7 +34,7 @@ describe ADN do
   #       Should probably be refactored to a separate class
   it "currently has a constant containing a http client" do
     ADN::HTTP.tap { |http|
-      http.address.must_equal "alpha-api.app.net"
+      http.address.must_equal "api.app.net"
       http.port.must_equal 443
       http.use_ssl?.must_equal true
     }

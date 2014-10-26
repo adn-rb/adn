@@ -7,7 +7,8 @@ describe ADN::User do
 
   let(:empty_user) { subject.new({})        }
   let(:user)       { subject.new(user_data) }
-  let(:user_data)  { fixture('user.json')   }
+  let(:user_response)  { fixture('user.json')   }
+  let(:user_data) { user_response["data"] }
 
   describe "me" do
     it "retrieves the user based on the current token" do
@@ -21,7 +22,7 @@ describe ADN::User do
 
   describe "find" do
     it "retrieves the user data from the API and returns a User object" do
-      ADN::API::User.stub(:retrieve, user_data) do
+      ADN::API::User.stub(:retrieve, user_response) do
         u = subject.find("4821")
         u.name.must_equal "Peter Hellberg"
         u.user_id.must_equal "4821"
